@@ -1,0 +1,42 @@
+plugins {
+  id 'org.asciidoctor.convert' version '1.5.3'
+  id 'org.springframework.boot' version '2.1.6.RELEASE'
+  id 'java'
+}
+
+apply plugin: 'io.spring.dependency-management'
+
+group = 'restdocs-tool-export'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '1.8'
+
+repositories {
+  mavenCentral()
+}
+
+ext {
+  set('snippetsDir', file("build/generated-snippets"))
+}
+
+dependencies {
+  implementation('org.springframework.boot:spring-boot-starter-web')
+  implementation('org.springframework.boot:spring-boot-starter-test') {
+    exclude group: 'junit', module: 'junit'
+  }
+  implementation('org.springframework.restdocs:spring-restdocs-mockmvc')
+  implementation('org.apache.commons:commons-lang3:3.9')
+  implementation('commons-io:commons-io:2.6')
+
+  testImplementation('org.mockito:mockito-core:2.27.0')
+  testImplementation('org.mockito:mockito-junit-jupiter:2.27.0')
+  testImplementation('org.junit.jupiter:junit-jupiter:5.4.2')
+}
+
+test {
+  outputs.dir snippetsDir
+}
+
+asciidoctor {
+  inputs.dir snippetsDir
+  dependsOn test
+}
