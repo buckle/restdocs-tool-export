@@ -1,54 +1,47 @@
-package restdocs.tool.export;
+package restdocs.tool.export.insomnia;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpHeaders;
-import org.springframework.restdocs.RestDocumentationContext;
 import org.springframework.restdocs.operation.Operation;
 import org.springframework.restdocs.operation.OperationRequest;
-import org.springframework.restdocs.snippet.Snippet;
 import org.springframework.stereotype.Component;
-import restdocs.tool.export.insomnia.Body;
-import restdocs.tool.export.insomnia.Export;
-import restdocs.tool.export.insomnia.Header;
-import restdocs.tool.export.insomnia.Resource;
+import restdocs.tool.export.AbstractFileToolExportHandler;
 
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
-import java.util.Base64;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
 @Component
-public class InsomniaSnippet implements Snippet {
+public class InsomniaToolExportHandler extends AbstractFileToolExportHandler {
 
   private ObjectMapper objectMapper;
-  private boolean firstWrite;
 
-  public InsomniaSnippet() {
+  @Override
+  public void initialize(File workingDirectory) throws IOException {
+    super.initialize(workingDirectory);
     this.objectMapper = new ObjectMapper();
     this.objectMapper.registerModule(new JavaTimeModule());
     this.objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-    this.firstWrite = true;
   }
 
   @Override
-  public void document(Operation operation) throws IOException {
-    RestDocumentationContext context = (RestDocumentationContext) operation.getAttributes().get(RestDocumentationContext.class.getName());
+  public String getToolName() {
+    return "INSOMNIA";
+  }
 
-    File workingDirectory = getOrCreateDirectory(context.getOutputDirectory());
-    File jsonFile = getJSONFile(workingDirectory);
-
+  @Override
+  public void handleOperation(Operation operation) throws IOException {
     Export export = null;
-    if(jsonFile.length() > 0) {
-      export = objectMapper.readValue(jsonFile, Export.class);
+    if(super.exportFile.length() > 0) {
+      export = objectMapper.readValue(super.exportFile, Export.class);
     }
     export = initOrUpdateExport(export);
 
@@ -56,38 +49,7 @@ public class InsomniaSnippet implements Snippet {
     Resource operationResource = createResourceForOperation(operation);
     operationResource.setParentId(folderResource.getId());
     export.addResource(operationResource);
-    updateJSONFile(jsonFile, export);
-    File aDocFile = getADocFile(workingDirectory);
-    updateADockFile(aDocFile, jsonFile);
-
-  }
-
-  protected File getOrCreateDirectory(File outputDirectory) throws IOException {
-
-    File file = new File(outputDirectory.getAbsolutePath() + "/insomnia-download");
-
-    if(!file.exists()) {
-      file.mkdir();
-    }
-
-    return file;
-  }
-
-  protected File getJSONFile(File workingDirectory) throws IOException {
-
-    File file = new File(workingDirectory.getAbsolutePath() + "/insomnia.json");
-
-    if(!file.exists()) {
-      file.createNewFile();
-    }
-
-    if(firstWrite) {
-      file.delete();
-      file.createNewFile();
-      firstWrite = false;
-    }
-
-    return file;
+    updateJSONFile(super.exportFile, export);
   }
 
   protected void updateJSONFile(File jsonFile, Export export) throws IOException {
@@ -95,29 +57,6 @@ public class InsomniaSnippet implements Snippet {
     jsonFile.createNewFile();
 
     objectMapper.writeValue(jsonFile, export);
-  }
-
-  protected File getADocFile(File workingDirectory) throws IOException {
-    File file = new File(workingDirectory.getAbsolutePath() + "/insomnia.adoc");
-
-    if(!file.exists()) {
-      file.createNewFile();
-    } else {
-      file.delete();
-      file.createNewFile();
-    }
-
-    return file;
-  }
-
-  protected void updateADockFile(File aDockFile, File jsonExport) throws IOException {
-
-    StringBuilder stringBuilder = new StringBuilder();
-
-    stringBuilder.append("link:++data:application/json;base64,");
-    stringBuilder.append(Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(jsonExport)));
-    stringBuilder.append("++[Download - Right Click And Save As]");
-    FileUtils.writeByteArrayToFile(aDockFile, stringBuilder.toString().getBytes(), false);
   }
 
   protected Export initOrUpdateExport(Export export) {
@@ -200,4 +139,5 @@ public class InsomniaSnippet implements Snippet {
 
     return resource;
   }
+
 }

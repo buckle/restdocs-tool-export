@@ -21,7 +21,7 @@ import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuild
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(SpringExtension.class)
-@SpringBootTest
+@SpringBootTest(properties = {"spring.application.name=test_application"})
 @AutoConfigureRestDocs
 @AutoConfigureMockMvc
 public class RestdocsToolExportApplicationTests {
@@ -29,7 +29,7 @@ public class RestdocsToolExportApplicationTests {
   @Autowired protected ObjectMapper objectMapper;
   @Autowired protected WebApplicationContext webApplicationContext;
   @Autowired protected RestDocumentationContextProvider restDocumentation;
-  @Autowired protected InsomniaSnippet insomniaSnippet;
+  @Autowired protected ToolExportSnippet toolExportSnippet;
   protected MockMvc mockMvc;
 
   @BeforeEach
@@ -37,7 +37,7 @@ public class RestdocsToolExportApplicationTests {
     this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
                                   .apply(documentationConfiguration(restDocumentation)
                                              .snippets()
-                                             .withAdditionalDefaults(insomniaSnippet))
+                                             .withAdditionalDefaults(toolExportSnippet))
                                   .build();
   }
 
