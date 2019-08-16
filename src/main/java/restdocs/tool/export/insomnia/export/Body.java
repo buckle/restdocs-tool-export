@@ -1,4 +1,4 @@
-package restdocs.tool.export.insomnia.domain;
+package restdocs.tool.export.insomnia.export;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 

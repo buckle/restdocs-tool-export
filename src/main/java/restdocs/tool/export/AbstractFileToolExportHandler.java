@@ -1,10 +1,7 @@
 package restdocs.tool.export;
 
-import org.apache.commons.io.FileUtils;
-
 import java.io.File;
 import java.io.IOException;
-import java.util.Base64;
 
 public abstract class AbstractFileToolExportHandler implements ToolExportHandler {
 
@@ -16,15 +13,6 @@ public abstract class AbstractFileToolExportHandler implements ToolExportHandler
     File implDir = getToolDirectory(workingDirectory);
     exportFile = initFile(implDir, ".export");
     docFile = initFile(implDir, ".adoc");
-  }
-
-  @Override
-  public void updateDocFile() throws IOException {
-    StringBuilder stringBuilder = new StringBuilder();
-    stringBuilder.append("link:++data:application/json;base64,");
-    stringBuilder.append(Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(exportFile)));
-    stringBuilder.append("++[Download - Right Click And Save As]");
-    FileUtils.writeByteArrayToFile(docFile, stringBuilder.toString().getBytes(), false);
   }
 
   protected File getToolDirectory(File workingDirectory) {

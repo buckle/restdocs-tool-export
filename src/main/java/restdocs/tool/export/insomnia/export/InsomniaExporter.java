@@ -1,13 +1,9 @@
-package restdocs.tool.export.insomnia.exporter;
+package restdocs.tool.export.insomnia.export;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpHeaders;
 import org.springframework.restdocs.operation.Operation;
 import org.springframework.restdocs.operation.OperationRequest;
-import restdocs.tool.export.insomnia.domain.Body;
-import restdocs.tool.export.insomnia.domain.Export;
-import restdocs.tool.export.insomnia.domain.Header;
-import restdocs.tool.export.insomnia.domain.Resource;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
