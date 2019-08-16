@@ -14,8 +14,8 @@ public abstract class AbstractFileToolExportHandler implements ToolExportHandler
   @Override
   public void initialize(File workingDirectory) throws IOException {
     File implDir = getToolDirectory(workingDirectory);
-    exportFile = initExportFile(implDir);
-    docFile = initDocFile(implDir);
+    exportFile = initFile(implDir, ".export");
+    docFile = initFile(implDir, ".adoc");
   }
 
   @Override
@@ -37,21 +37,8 @@ public abstract class AbstractFileToolExportHandler implements ToolExportHandler
     return file;
   }
 
-  protected File initExportFile(File implDir) throws IOException {
-    File file = new File(implDir.getAbsoluteFile() + "/" + getToolName().toLowerCase() + ".export");
-
-    if(!file.exists()) {
-      file.createNewFile();
-    } else {
-      file.delete();
-      file.createNewFile();
-    }
-
-    return file;
-  }
-
-  protected File initDocFile(File implDir) throws IOException {
-    File file = new File(implDir.getAbsoluteFile() + "/" + getToolName().toLowerCase() + ".adoc");
+  protected File initFile(File implDir, String fileEnding) throws IOException {
+    File file = new File(implDir.getAbsoluteFile() + "/" + getToolName().toLowerCase() + fileEnding);
 
     if(!file.exists()) {
       file.createNewFile();

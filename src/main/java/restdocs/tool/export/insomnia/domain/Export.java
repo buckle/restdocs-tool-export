@@ -1,4 +1,4 @@
-package restdocs.tool.export.insomnia;
+package restdocs.tool.export.insomnia.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -6,7 +6,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Export {
@@ -24,7 +26,7 @@ public class Export {
   @JsonProperty("__export_source")
   private String exportSource;
 
-  private List<Resource> resources;
+  private Set<Resource> resources;
 
   public String getType() {
     return type;
@@ -60,16 +62,16 @@ public class Export {
 
   public void addResource(Resource resource) {
     if(this.resources == null) {
-      this.resources = new ArrayList<>();
+      this.resources = new HashSet<>();
     }
     this.resources.add(resource);
   }
 
-  public List<Resource> getResources() {
+  public Set<Resource> getResources() {
     return resources;
   }
 
-  public void setResources(List<Resource> resources) {
+  public void setResources(Set<Resource> resources) {
     this.resources = resources;
   }
 }
