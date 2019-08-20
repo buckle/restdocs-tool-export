@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.util.Objects;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Header {
+public class Pair {
 
   private String id;
   private String name;
@@ -39,10 +39,10 @@ public class Header {
   public boolean equals(Object o) {
     if(this == o) return true;
     if(o == null || getClass() != o.getClass()) return false;
-    Header header = (Header) o;
-    return Objects.equals(id, header.id) &&
-           Objects.equals(name, header.name) &&
-           Objects.equals(value, header.value);
+    Pair pair = (Pair) o;
+    return Objects.equals(id, pair.id) &&
+           Objects.equals(name, pair.name) &&
+           Objects.equals(value, pair.value);
   }
 
   @Override

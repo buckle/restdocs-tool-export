@@ -26,7 +26,8 @@ public class Resource {
   private String method;
   private String url;
   private Body body;
-  private Set<Header> headers;
+  private Set<Pair> headers;
+  private Set<Pair> parameters;
 
   public String getType() {
     return type;
@@ -100,11 +101,19 @@ public class Resource {
     this.body = body;
   }
 
-  public Set<Header> getHeaders() {
+  public Set<Pair> getHeaders() {
     return headers;
   }
 
-  public void setHeaders(Set<Header> headers) {
+  public void setHeaders(Set<Pair> headers) {
     this.headers = headers;
+  }
+
+  public Set<Pair> getParameters() {
+    return parameters;
+  }
+
+  public void setParameters(Set<Pair> parameters) {
+    this.parameters = parameters;
   }
 }

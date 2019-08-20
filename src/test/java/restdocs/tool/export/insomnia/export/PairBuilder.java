@@ -4,42 +4,42 @@ import java.util.UUID;
 
 import static restdocs.tool.export.insomnia.export.InsomniaConstants.PAIR_ID;
 
-public class HeaderBuilder {
+public class PairBuilder {
 
   private String id;
   private String name;
   private String value;
 
-  private HeaderBuilder() {
+  private PairBuilder() {
     this.id = InsomniaExportUtils.generateId(PAIR_ID);
     this.name = "Name" + UUID.randomUUID().toString();
     this.value = "Value" + UUID.randomUUID().toString();
   }
 
-  public HeaderBuilder setId(String id) {
+  public PairBuilder setId(String id) {
     this.id = id;
     return this;
   }
 
-  public HeaderBuilder seName(String name) {
+  public PairBuilder seName(String name) {
     this.name = name;
     return this;
   }
 
-  public HeaderBuilder setValue(String value) {
+  public PairBuilder setValue(String value) {
     this.value = value;
     return this;
   }
 
-  public static HeaderBuilder builder() {
-    return new HeaderBuilder();
+  public static PairBuilder builder() {
+    return new PairBuilder();
   }
 
-  public Header build() {
-    Header header = new Header();
-    header.setId(this.id);
-    header.setName(this.name);
-    header.setValue(this.value);
-    return header;
+  public Pair build() {
+    Pair pair = new Pair();
+    pair.setId(this.id);
+    pair.setName(this.name);
+    pair.setValue(this.value);
+    return pair;
   }
 }

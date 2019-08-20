@@ -1,15 +1,11 @@
 package restdocs.tool.export.insomnia.export;
 
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.http.HttpHeaders;
 import org.springframework.restdocs.operation.Operation;
 import org.springframework.restdocs.operation.OperationRequest;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
@@ -72,7 +68,8 @@ public class InsomniaExporter {
     Body body = new Body();
     body.setText(request.getContentAsString());
 
-    Set<Header> docHeaders = createHeaders(request.getHeaders());
+    Set<Pair> headers = new HeaderCreator(request.getHeaders()).create();
+    Set<Pair> parameters = new ParameterCreator(request.getParameters()).create();
 
     String name = operation.getName().replaceAll("[^a-zA-Z0-9]", " ");
     long epochMili = LocalDateTime.now()
@@ -87,32 +84,11 @@ public class InsomniaExporter {
     resource.setMethod(request.getMethod().toString().toUpperCase());
     resource.setUrl(request.getUri().toString());
     resource.setBody(body);
-    resource.setHeaders(docHeaders);
+    resource.setHeaders(headers);
+    resource.setParameters(parameters);
     resource.setCreated(epochMili);
     resource.setModified(epochMili);
 
     return resource;
-  }
-
-  protected Set<Header> createHeaders(HttpHeaders httpHeaders) {
-    if(httpHeaders != null) {
-      Set<Header> docHeaders = new HashSet<>();
-
-      for(Map.Entry<String, List<String>> stringListEntry : httpHeaders.entrySet()) {
-        String key = stringListEntry.getKey();
-        List<String> values = stringListEntry.getValue();
-
-        Header header = new Header();
-        header.setId(InsomniaExportUtils.generateId(InsomniaConstants.PAIR_ID));
-        header.setName(key);
-        header.setValue(StringUtils.join(values, ","));
-
-        docHeaders.add(header);
-      }
-
-      return docHeaders;
-    }
-
-    return null;
   }
 }
