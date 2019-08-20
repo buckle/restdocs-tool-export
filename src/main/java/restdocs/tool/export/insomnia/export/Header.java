@@ -2,6 +2,8 @@ package restdocs.tool.export.insomnia.export;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import java.util.Objects;
+
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Header {
 
@@ -31,5 +33,20 @@ public class Header {
 
   public void setValue(String value) {
     this.value = value;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if(this == o) return true;
+    if(o == null || getClass() != o.getClass()) return false;
+    Header header = (Header) o;
+    return Objects.equals(id, header.id) &&
+           Objects.equals(name, header.name) &&
+           Objects.equals(value, header.value);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(id, name, value);
   }
 }

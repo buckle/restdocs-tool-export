@@ -7,7 +7,11 @@ import org.springframework.restdocs.operation.OperationRequest;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
 
 public class InsomniaExporter {
 
@@ -68,20 +72,7 @@ public class InsomniaExporter {
     Body body = new Body();
     body.setText(request.getContentAsString());
 
-    HttpHeaders headers = request.getHeaders();
-    List<Header> docHeaders = new ArrayList<>();
-
-    for(Map.Entry<String, List<String>> stringListEntry : headers.entrySet()) {
-      String key = stringListEntry.getKey();
-      List<String> values = stringListEntry.getValue();
-
-      Header header = new Header();
-      header.setId("pair_" + UUID.randomUUID().toString().replaceAll("-", ""));
-      header.setName(key);
-      header.setValue(StringUtils.join(values, ","));
-
-      docHeaders.add(header);
-    }
+    Set<Header> docHeaders = createHeaders(request.getHeaders());
 
     String name = operation.getName().replaceAll("[^a-zA-Z0-9]", " ");
     long epochMili = LocalDateTime.now()
@@ -103,4 +94,25 @@ public class InsomniaExporter {
     return resource;
   }
 
+  protected Set<Header> createHeaders(HttpHeaders httpHeaders) {
+    if(httpHeaders != null) {
+      Set<Header> docHeaders = new HashSet<>();
+
+      for(Map.Entry<String, List<String>> stringListEntry : httpHeaders.entrySet()) {
+        String key = stringListEntry.getKey();
+        List<String> values = stringListEntry.getValue();
+
+        Header header = new Header();
+        header.setId(InsomniaExportUtils.generateId(InsomniaConstants.PAIR_ID));
+        header.setName(key);
+        header.setValue(StringUtils.join(values, ","));
+
+        docHeaders.add(header);
+      }
+
+      return docHeaders;
+    }
+
+    return null;
+  }
 }

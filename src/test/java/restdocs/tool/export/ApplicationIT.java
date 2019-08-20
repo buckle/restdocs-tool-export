@@ -24,7 +24,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(properties = {"spring.application.name=test_application"})
 @AutoConfigureRestDocs
 @AutoConfigureMockMvc
-public class RestdocsToolExportApplicationTests {
+public class ApplicationIT {
 
   @Autowired protected ObjectMapper objectMapper;
   @Autowired protected WebApplicationContext webApplicationContext;
