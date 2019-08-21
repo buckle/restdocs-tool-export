@@ -16,7 +16,7 @@ import static org.springframework.http.HttpHeaders.ALLOW;
 import static restdocs.tool.export.RestDocUtils.findHttpHeaderForName;
 import static restdocs.tool.export.insomnia.export.InsomniaAssertionUtils.assertIdMatches;
 
-public class HeaderCreatorTest {
+public class HeadersCreatorTest {
 
   @Test
   void create() {
@@ -24,7 +24,7 @@ public class HeaderCreatorTest {
     httpHeaders.setAccept(Arrays.asList(MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML));
     httpHeaders.setAllow(Sets.newSet(HttpMethod.GET, HttpMethod.POST));
 
-    Set<Pair> headers = new HeaderCreator(httpHeaders).create();
+    Set<Pair> headers = new HeadersCreator(httpHeaders).create();
 
     assertNotNull(headers);
     Pair acceptHeader = findHeaderForName(headers, ACCEPT);
@@ -41,7 +41,7 @@ public class HeaderCreatorTest {
 
   @Test
   void createWhenHeadersNull() {
-    Set<Pair> pairs = new HeaderCreator(null).create();
+    Set<Pair> pairs = new HeadersCreator(null).create();
 
     assertNull(pairs);
   }
@@ -50,7 +50,7 @@ public class HeaderCreatorTest {
   void createWhenHeadersEmpty() {
     HttpHeaders httpHeaders = new HttpHeaders();
 
-    Set<Pair> pairs = new HeaderCreator(httpHeaders).create();
+    Set<Pair> pairs = new HeadersCreator(httpHeaders).create();
 
     assertNull(pairs);
   }

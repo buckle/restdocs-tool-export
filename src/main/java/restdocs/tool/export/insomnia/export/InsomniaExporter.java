@@ -68,8 +68,8 @@ public class InsomniaExporter {
     Body body = new Body();
     body.setText(request.getContentAsString());
 
-    Set<Pair> headers = new HeaderCreator(request.getHeaders()).create();
-    Set<Pair> parameters = new ParameterCreator(request.getParameters()).create();
+    Set<Pair> headers = new HeadersCreator(request.getHeaders()).create();
+    Set<Pair> parameters = new ParametersCreator(request.getParameters()).create();
 
     String name = operation.getName().replaceAll("[^a-zA-Z0-9]", " ");
     long epochMili = LocalDateTime.now()

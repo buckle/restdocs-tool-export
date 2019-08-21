@@ -8,11 +8,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public class HeaderCreator {
+public class HeadersCreator {
 
   private HttpHeaders httpHeaders;
 
-  public HeaderCreator(HttpHeaders httpHeaders) {
+  public HeadersCreator(HttpHeaders httpHeaders) {
     this.httpHeaders = httpHeaders;
   }
 
