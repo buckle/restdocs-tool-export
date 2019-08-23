@@ -9,7 +9,7 @@ public abstract class AbstractFileToolExportHandler implements ToolExportHandler
   protected File docFile;
 
   @Override
-  public void initialize(File workingDirectory) throws IOException {
+  public void initialize(File workingDirectory, String applicationName) throws IOException {
     File implDir = getToolDirectory(workingDirectory);
     exportFile = initFile(implDir, ".export");
     docFile = initFile(implDir, ".adoc");

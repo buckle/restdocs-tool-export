@@ -32,7 +32,8 @@ public class ToolExportSnippet implements Snippet {
     File outputDirectory = context.getOutputDirectory();
     init(outputDirectory);
 
-    insomniaToolExportHandler.handleOperation(operation, applicationName);
+    insomniaToolExportHandler.handleOperation(operation);
+    insomniaToolExportHandler.updateDocFile();
   }
 
   protected void init(File outputDirectory) throws IOException {
@@ -40,7 +41,7 @@ public class ToolExportSnippet implements Snippet {
       System.setProperty("restdocs.tool.export.initialized", "true");
 
       insomniaToolExportHandler = new InsomniaToolExportHandler();
-      insomniaToolExportHandler.initialize(outputDirectory);
+      insomniaToolExportHandler.initialize(outputDirectory, applicationName);
     }
   }
 }

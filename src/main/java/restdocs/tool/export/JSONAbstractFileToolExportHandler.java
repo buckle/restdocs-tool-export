@@ -17,8 +17,8 @@ public abstract class JSONAbstractFileToolExportHandler extends AbstractFileTool
   private ObjectMapper objectMapper;
 
   @Override
-  public void initialize(File workingDirectory) throws IOException {
-    super.initialize(workingDirectory);
+  public void initialize(File workingDirectory, String applicationName) throws IOException {
+    super.initialize(workingDirectory, applicationName);
     this.objectMapper = new ObjectMapper();
     this.objectMapper.registerModule(new JavaTimeModule());
     this.objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
@@ -33,12 +33,12 @@ public abstract class JSONAbstractFileToolExportHandler extends AbstractFileTool
     FileUtils.writeByteArrayToFile(docFile, stringBuilder.toString().getBytes(), false);
   }
 
-  protected <T> T getExport(File jsonFile, Class<T> clazz) {
+  protected <T> T getFileData(Class<T> clazz) {
     T export = null;
     try {
-      export = objectMapper.readValue(jsonFile, clazz);
+      export = objectMapper.readValue(super.exportFile, clazz);
     } catch(Exception e) {
-      if(jsonFile.length() != 0) {
+      if(super.exportFile.length() != 0) {
         LOG.error("Exception reading JSON export file.", e);
       }
     }
@@ -46,10 +46,10 @@ public abstract class JSONAbstractFileToolExportHandler extends AbstractFileTool
     return export;
   }
 
-  protected void updateJSONFile(File jsonFile, Object object) throws IOException {
-    jsonFile.delete();
-    jsonFile.createNewFile();
+  protected void updateFileData(Object object) throws IOException {
+    super.exportFile.delete();
+    super.exportFile.createNewFile();
 
-    objectMapper.writeValue(jsonFile, object);
+    objectMapper.writeValue(super.exportFile, object);
   }
 }

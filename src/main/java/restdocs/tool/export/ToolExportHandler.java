@@ -7,11 +7,11 @@ import java.io.IOException;
 
 public interface ToolExportHandler {
 
-  void initialize(File workingDirectory) throws IOException;
+  void initialize(File workingDirectory, String applicationName) throws IOException;
 
   String getToolName();
 
-  void handleOperation(Operation operation, String applicationName) throws IOException;
+  void handleOperation(Operation operation) throws IOException;
 
   void updateDocFile() throws IOException;
 

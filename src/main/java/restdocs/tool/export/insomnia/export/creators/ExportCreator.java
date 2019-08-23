@@ -1,6 +1,5 @@
 package restdocs.tool.export.insomnia.export.creators;
 
-import org.springframework.restdocs.operation.Operation;
 import restdocs.tool.export.Creator;
 import restdocs.tool.export.insomnia.export.Export;
 
@@ -10,10 +9,10 @@ import static restdocs.tool.export.insomnia.export.InsomniaConstants.EXPORT_FORM
 import static restdocs.tool.export.insomnia.export.InsomniaConstants.EXPORT_SOURCE;
 import static restdocs.tool.export.insomnia.export.InsomniaConstants.EXPORT_TYPE;
 
-public class ExportCreator implements Creator<Export, Operation> {
+public class ExportCreator implements Creator<Export, String> {
 
   @Override
-  public Export create(Operation operation) {
+  public Export create(String appName) {
 
     Export export = new Export();
     export.setType(EXPORT_TYPE);

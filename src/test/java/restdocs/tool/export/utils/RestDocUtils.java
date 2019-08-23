@@ -1,4 +1,4 @@
-package restdocs.tool.export;
+package restdocs.tool.export.utils;
 
 import org.springframework.http.HttpHeaders;
 

@@ -7,22 +7,49 @@ import restdocs.tool.export.insomnia.export.creators.RequestResourceCreator;
 
 import java.util.Set;
 
+import static restdocs.tool.export.insomnia.export.InsomniaConstants.REQUEST_GROUP_TYPE;
 
 public class InsomniaExporter {
 
-  public Export processOperation(Operation operation, Export export, String applicationName) {
+  private ExportCreator exportCreator;
+  private FolderResourceCreator folderResourceCreator;
+  private RequestResourceCreator requestResourceCreator;
 
-    export = export == null ? new ExportCreator().create(operation) : export;
+  public InsomniaExporter() {
+    this.exportCreator = new ExportCreator();
+    this.folderResourceCreator = new FolderResourceCreator();
+    this.requestResourceCreator = new RequestResourceCreator();
+  }
 
-    Resource folderResource = findExistingFolderResource(export.getResources());
-    if(folderResource == null) {
-      folderResource = new FolderResourceCreator().create(applicationName);
+  public InsomniaExporter(ExportCreator exportCreator, FolderResourceCreator folderResourceCreator) {
+    this.exportCreator = exportCreator;
+    this.folderResourceCreator = folderResourceCreator;
+  }
+
+  public InsomniaExporter(RequestResourceCreator requestResourceCreator) {
+    this.requestResourceCreator = requestResourceCreator;
+  }
+
+  public Export initializeExport(String applicationName) {
+    if(applicationName != null) {
+      Export export = exportCreator.create(applicationName);
+      Resource folderResource = folderResourceCreator.create(applicationName);
       export.addResource(folderResource);
+
+      return export;
     }
 
-    Resource operationResource = new RequestResourceCreator().create(operation);
-    operationResource.setParentId(folderResource.getId());
-    export.addResource(operationResource);
+    return null;
+  }
+
+  public Export processOperation(Operation operation, Export export) {
+
+    if(operation != null && export != null) {
+      Resource folderResource = findExistingFolderResource(export.getResources());
+      Resource operationResource = requestResourceCreator.create(operation);
+      operationResource.setParentId(folderResource.getId());
+      export.addResource(operationResource);
+    }
 
     return export;
   }
@@ -30,7 +57,7 @@ public class InsomniaExporter {
   protected Resource findExistingFolderResource(Set<Resource> resources) {
     if(resources != null) {
       return resources.stream()
-                      .filter(resourceIter -> InsomniaConstants.REQUEST_GROUP_TYPE.equals(resourceIter.getType()))
+                      .filter(resourceIter -> REQUEST_GROUP_TYPE.equals(resourceIter.getType()))
                       .findFirst()
                       .orElse(null);
     }
