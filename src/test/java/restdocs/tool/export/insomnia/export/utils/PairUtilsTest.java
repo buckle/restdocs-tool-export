@@ -1,7 +1,9 @@
-package restdocs.tool.export.insomnia.export;
+package restdocs.tool.export.insomnia.export.utils;
 
 import org.junit.jupiter.api.Test;
 import org.mockito.internal.util.collections.Sets;
+import restdocs.tool.export.insomnia.export.Pair;
+import restdocs.tool.export.insomnia.export.PairBuilder;
 
 import java.util.Set;
 import java.util.UUID;

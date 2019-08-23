@@ -2,6 +2,8 @@ package restdocs.tool.export.insomnia.export;
 
 public class InsomniaConstants {
 
+  private InsomniaConstants() {}
+
   // TYPES
   public static final String EXPORT_TYPE = "export";
   public static final String REQUEST_GROUP_TYPE = "request_group";

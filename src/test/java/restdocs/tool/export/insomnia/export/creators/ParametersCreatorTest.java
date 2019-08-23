@@ -1,8 +1,9 @@
-package restdocs.tool.export.insomnia.export;
+package restdocs.tool.export.insomnia.export.creators;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.restdocs.operation.Parameters;
 import org.springframework.restdocs.operation.QueryStringParser;
+import restdocs.tool.export.insomnia.export.Pair;
 
 import java.net.URI;
 import java.util.Set;
@@ -10,7 +11,7 @@ import java.util.Set;
 import static org.junit.jupiter.api.Assertions.*;
 import static restdocs.tool.export.insomnia.export.InsomniaAssertionUtils.assertIdMatches;
 import static restdocs.tool.export.insomnia.export.InsomniaConstants.PAIR_ID;
-import static restdocs.tool.export.insomnia.export.PairUtils.findPairByNameValue;
+import static restdocs.tool.export.insomnia.export.utils.PairUtils.findPairByNameValue;
 
 public class ParametersCreatorTest {
 
@@ -18,7 +19,7 @@ public class ParametersCreatorTest {
   void create() throws Exception {
     Parameters parameters = new QueryStringParser().parse(new URI("/?param1=prize1&param2=prize2&param1=surprise"));
 
-    Set<Pair> parameterPairs = new ParametersCreator(parameters).create();
+    Set<Pair> parameterPairs = new ParametersCreator().create(parameters);
 
     assertNotNull(parameterPairs);
     assertEquals(3, parameterPairs.size());
@@ -37,7 +38,7 @@ public class ParametersCreatorTest {
   void createWhenDuplicateParamValue() throws Exception {
     Parameters parameters = new QueryStringParser().parse(new URI("/?param1=prize1&param1=prize1"));
 
-    Set<Pair> parameterPairs = new ParametersCreator(parameters).create();
+    Set<Pair> parameterPairs = new ParametersCreator().create(parameters);
 
     assertNotNull(parameterPairs);
     assertEquals(1, parameterPairs.size());
@@ -48,11 +49,11 @@ public class ParametersCreatorTest {
 
   @Test
   void createWhenNullParameters() {
-    assertNull(new ParametersCreator(null).create());
+    assertNull(new ParametersCreator().create(null));
   }
 
   @Test
   void createWhenEmptyParameters() {
-    assertNull(new ParametersCreator(new Parameters()).create());
+    assertNull(new ParametersCreator().create(new Parameters()));
   }
 }

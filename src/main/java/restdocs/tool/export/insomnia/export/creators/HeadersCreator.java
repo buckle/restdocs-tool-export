@@ -1,22 +1,21 @@
-package restdocs.tool.export.insomnia.export;
+package restdocs.tool.export.insomnia.export.creators;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpHeaders;
+import restdocs.tool.export.Creator;
+import restdocs.tool.export.insomnia.export.InsomniaConstants;
+import restdocs.tool.export.insomnia.export.Pair;
+import restdocs.tool.export.insomnia.export.utils.InsomniaExportUtils;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public class HeadersCreator {
+public class HeadersCreator implements Creator<Set<Pair>, HttpHeaders> {
 
-  private HttpHeaders httpHeaders;
-
-  public HeadersCreator(HttpHeaders httpHeaders) {
-    this.httpHeaders = httpHeaders;
-  }
-
-  protected Set<Pair> create() {
+  @Override
+  public Set<Pair> create(HttpHeaders httpHeaders) {
     if(httpHeaders != null && httpHeaders.size() > 0) {
       Set<Pair> docPairs = new HashSet<>();
 

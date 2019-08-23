@@ -1,13 +1,11 @@
 package restdocs.tool.export.insomnia.export;
 
 import org.junit.jupiter.api.Test;
+import restdocs.tool.export.insomnia.export.utils.InsomniaExportUtils;
 
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static restdocs.tool.export.insomnia.export.InsomniaConstants.PAIR_ID;
 
 public class PairTest {

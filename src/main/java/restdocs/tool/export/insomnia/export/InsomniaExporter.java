@@ -1,8 +1,7 @@
 package restdocs.tool.export.insomnia.export;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.restdocs.operation.Operation;
-import org.springframework.restdocs.operation.OperationRequest;
+import restdocs.tool.export.insomnia.export.creators.RequestResourceCreator;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -15,7 +14,7 @@ public class InsomniaExporter {
 
     export = updateExport(export);
     Resource folderResource = getFolderResource(export);
-    Resource operationResource = createResourceForOperation(operation);
+    Resource operationResource = new RequestResourceCreator().create(operation);
     operationResource.setParentId(folderResource.getId());
     export.addResource(operationResource);
 
@@ -60,35 +59,5 @@ public class InsomniaExporter {
     folderResource.setModified(epochMili);
 
     return folderResource;
-  }
-
-  protected Resource createResourceForOperation(Operation operation) {
-    OperationRequest request = operation.getRequest();
-
-    Body body = new Body();
-    body.setText(request.getContentAsString());
-
-    Set<Pair> headers = new HeadersCreator(request.getHeaders()).create();
-    Set<Pair> parameters = new ParametersCreator(request.getParameters()).create();
-
-    String name = operation.getName().replaceAll("[^a-zA-Z0-9]", " ");
-    long epochMili = LocalDateTime.now()
-        .atZone(ZoneId.systemDefault())
-        .toInstant()
-        .toEpochMilli();
-
-    Resource resource = new Resource();
-    resource.setId("req_" + UUID.randomUUID().toString().replaceAll("-", ""));
-    resource.setType("request");
-    resource.setName(StringUtils.capitalize(name));
-    resource.setMethod(request.getMethod().toString().toUpperCase());
-    resource.setUrl(request.getUri().toString());
-    resource.setBody(body);
-    resource.setHeaders(headers);
-    resource.setParameters(parameters);
-    resource.setCreated(epochMili);
-    resource.setModified(epochMili);
-
-    return resource;
   }
 }

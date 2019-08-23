@@ -1,23 +1,20 @@
-package restdocs.tool.export.insomnia.export;
+package restdocs.tool.export.insomnia.export.creators;
 
 import org.springframework.restdocs.operation.Parameters;
+import restdocs.tool.export.Creator;
+import restdocs.tool.export.insomnia.export.Pair;
 
 import java.util.HashSet;
 import java.util.Set;
 
 import static restdocs.tool.export.insomnia.export.InsomniaConstants.PAIR_ID;
-import static restdocs.tool.export.insomnia.export.InsomniaExportUtils.generateId;
-import static restdocs.tool.export.insomnia.export.PairUtils.findPairByNameValue;
+import static restdocs.tool.export.insomnia.export.utils.InsomniaExportUtils.generateId;
+import static restdocs.tool.export.insomnia.export.utils.PairUtils.findPairByNameValue;
 
-public class ParametersCreator {
+public class ParametersCreator implements Creator<Set<Pair>, Parameters> {
 
-  private Parameters parameters;
-
-  public ParametersCreator(Parameters parameters) {
-    this.parameters = parameters;
-  }
-
-  public Set<Pair> create() {
+  @Override
+  public Set<Pair> create(Parameters parameters) {
     if(parameters != null && !parameters.isEmpty()) {
       Set<Pair> parameterPairs = new HashSet<>();
 

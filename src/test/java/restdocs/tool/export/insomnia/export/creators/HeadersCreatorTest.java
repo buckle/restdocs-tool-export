@@ -1,4 +1,4 @@
-package restdocs.tool.export.insomnia.export;
+package restdocs.tool.export.insomnia.export.creators;
 
 import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Test;
@@ -6,6 +6,8 @@ import org.mockito.internal.util.collections.Sets;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
+import restdocs.tool.export.insomnia.export.InsomniaConstants;
+import restdocs.tool.export.insomnia.export.Pair;
 
 import java.util.Arrays;
 import java.util.Set;
@@ -24,7 +26,7 @@ public class HeadersCreatorTest {
     httpHeaders.setAccept(Arrays.asList(MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML));
     httpHeaders.setAllow(Sets.newSet(HttpMethod.GET, HttpMethod.POST));
 
-    Set<Pair> headers = new HeadersCreator(httpHeaders).create();
+    Set<Pair> headers = new HeadersCreator().create(httpHeaders);
 
     assertNotNull(headers);
     Pair acceptHeader = findHeaderForName(headers, ACCEPT);
@@ -41,7 +43,7 @@ public class HeadersCreatorTest {
 
   @Test
   void createWhenHeadersNull() {
-    Set<Pair> pairs = new HeadersCreator(null).create();
+    Set<Pair> pairs = new HeadersCreator().create(null);
 
     assertNull(pairs);
   }
@@ -50,7 +52,7 @@ public class HeadersCreatorTest {
   void createWhenHeadersEmpty() {
     HttpHeaders httpHeaders = new HttpHeaders();
 
-    Set<Pair> pairs = new HeadersCreator(httpHeaders).create();
+    Set<Pair> pairs = new HeadersCreator().create(httpHeaders);
 
     assertNull(pairs);
   }
