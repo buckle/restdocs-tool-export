@@ -11,7 +11,7 @@ public interface ToolExportHandler {
 
   String getToolName();
 
-  void handleOperation(Operation operation) throws IOException;
+  void handleOperation(Operation operation, String applicationName) throws IOException;
 
   void updateDocFile() throws IOException;
 

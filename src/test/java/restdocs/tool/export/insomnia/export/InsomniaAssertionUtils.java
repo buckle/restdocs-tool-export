@@ -1,5 +1,6 @@
 package restdocs.tool.export.insomnia.export;
 
+import org.apache.commons.text.WordUtils;
 import org.junit.platform.commons.util.StringUtils;
 
 import java.time.Instant;
@@ -22,9 +23,10 @@ public class InsomniaAssertionUtils {
     assertTrue(time.isBefore(LocalDateTime.now().plusSeconds(3)));
   }
 
-  public static void assertName(String name) {
+  public static void assertName(String name, String key) {
     assertFalse(StringUtils.isBlank(name));
     assertNotNull(name);
     assertTrue(name.matches("[a-zA-Z0-9 ]+"));
+    assertTrue(name.contains(WordUtils.capitalize(key)));
   }
 }

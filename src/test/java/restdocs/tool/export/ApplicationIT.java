@@ -5,6 +5,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -29,15 +30,17 @@ public class ApplicationIT {
   @Autowired protected ObjectMapper objectMapper;
   @Autowired protected WebApplicationContext webApplicationContext;
   @Autowired protected RestDocumentationContextProvider restDocumentation;
-  @Autowired protected ToolExportSnippet toolExportSnippet;
   protected MockMvc mockMvc;
+
+  @Value("${spring.application.name}")
+  protected String appName;
 
   @BeforeEach
   void setUp() {
     this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
                                   .apply(documentationConfiguration(restDocumentation)
                                              .snippets()
-                                             .withAdditionalDefaults(toolExportSnippet))
+                                             .withAdditionalDefaults(ToolExportSnippet.get(appName)))
                                   .build();
   }
 

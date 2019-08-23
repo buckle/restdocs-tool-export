@@ -1,21 +1,30 @@
 package restdocs.tool.export;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.restdocs.RestDocumentationContext;
 import org.springframework.restdocs.operation.Operation;
 import org.springframework.restdocs.snippet.Snippet;
-import org.springframework.stereotype.Component;
+import restdocs.tool.export.insomnia.handler.InsomniaToolExportHandler;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
 
-@Component
 public class ToolExportSnippet implements Snippet {
 
-  @Autowired private List<ToolExportHandler> exportHandlers;
+  private static ToolExportSnippet toolExportSnippet;
+  private InsomniaToolExportHandler insomniaToolExportHandler;
+  private String applicationName;
 
-  private boolean initialized = false;
+  private ToolExportSnippet(String applicationName) {
+    this.applicationName = applicationName;
+  }
+
+  public static ToolExportSnippet get(String applicationName) {
+    if(toolExportSnippet == null) {
+      toolExportSnippet = new ToolExportSnippet(applicationName);
+    }
+
+    return toolExportSnippet;
+  }
 
   @Override
   public void document(Operation operation) throws IOException {
@@ -23,18 +32,15 @@ public class ToolExportSnippet implements Snippet {
     File outputDirectory = context.getOutputDirectory();
     init(outputDirectory);
 
-    for(ToolExportHandler exportHandler : exportHandlers) {
-      exportHandler.handleOperation(operation);
-      exportHandler.updateDocFile();
-    }
+    insomniaToolExportHandler.handleOperation(operation, applicationName);
   }
 
   protected void init(File outputDirectory) throws IOException {
-    if(!initialized) {
-      initialized = true;
-      for(ToolExportHandler exportHandler : exportHandlers) {
-        exportHandler.initialize(outputDirectory);
-      }
+    if(System.getProperty("restdocs.tool.export.initialized") == null) {
+      System.setProperty("restdocs.tool.export.initialized", "true");
+
+      insomniaToolExportHandler = new InsomniaToolExportHandler();
+      insomniaToolExportHandler.initialize(outputDirectory);
     }
   }
 }

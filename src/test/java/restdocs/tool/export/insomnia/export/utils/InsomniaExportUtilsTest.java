@@ -32,7 +32,7 @@ public class InsomniaExportUtilsTest {
 
     String formattedName = InsomniaExportUtils.formatName(name);
 
-    assertName(formattedName);
+    assertName(formattedName, "blah");
     assertEquals("Blah Blah123 Hah", formattedName);
   }
 

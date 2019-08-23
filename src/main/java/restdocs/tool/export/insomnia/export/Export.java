@@ -24,7 +24,7 @@ public class Export {
   @JsonProperty("__export_source")
   private String exportSource;
 
-  private Set<Resource> resources;
+  private Set<Resource> resources = null;
 
   public String getType() {
     return type;
@@ -67,9 +67,5 @@ public class Export {
 
   public Set<Resource> getResources() {
     return resources;
-  }
-
-  public void setResources(Set<Resource> resources) {
-    this.resources = resources;
   }
 }

@@ -1,7 +1,6 @@
 package restdocs.tool.export.insomnia.handler;
 
 import org.springframework.restdocs.operation.Operation;
-import org.springframework.stereotype.Component;
 import restdocs.tool.export.JSONAbstractFileToolExportHandler;
 import restdocs.tool.export.insomnia.export.Export;
 import restdocs.tool.export.insomnia.export.InsomniaExporter;
@@ -9,7 +8,6 @@ import restdocs.tool.export.insomnia.export.InsomniaExporter;
 import java.io.File;
 import java.io.IOException;
 
-@Component
 public class InsomniaToolExportHandler extends JSONAbstractFileToolExportHandler {
 
   private InsomniaExporter insomniaExporter;
@@ -26,9 +24,9 @@ public class InsomniaToolExportHandler extends JSONAbstractFileToolExportHandler
   }
 
   @Override
-  public void handleOperation(Operation operation) throws IOException {
+  public void handleOperation(Operation operation, String applicationName) throws IOException {
     Export export = getExport(super.exportFile, Export.class);
-    export = insomniaExporter.processOperation(operation, export);
+    export = insomniaExporter.processOperation(operation, export, applicationName);
     updateJSONFile(super.exportFile, export);
   }
 
