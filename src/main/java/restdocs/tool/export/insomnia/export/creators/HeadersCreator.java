@@ -2,7 +2,7 @@ package restdocs.tool.export.insomnia.export.creators;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpHeaders;
-import restdocs.tool.export.Creator;
+import restdocs.tool.export.common.creator.Creator;
 import restdocs.tool.export.insomnia.export.InsomniaConstants;
 import restdocs.tool.export.insomnia.export.Pair;
 import restdocs.tool.export.insomnia.export.utils.InsomniaExportUtils;

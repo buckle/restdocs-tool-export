@@ -1,4 +1,4 @@
-package restdocs.tool.export;
+package restdocs.tool.export.common.handler;
 
 import org.springframework.restdocs.operation.Operation;
 
@@ -12,7 +12,5 @@ public interface ToolExportHandler {
   String getToolName();
 
   void handleOperation(Operation operation) throws IOException;
-
-  void updateDocFile() throws IOException;
 
 }

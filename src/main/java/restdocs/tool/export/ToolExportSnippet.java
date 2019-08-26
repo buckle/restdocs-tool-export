@@ -33,7 +33,6 @@ public class ToolExportSnippet implements Snippet {
     init(outputDirectory);
 
     insomniaToolExportHandler.handleOperation(operation);
-    insomniaToolExportHandler.updateDocFile();
   }
 
   protected void init(File outputDirectory) throws IOException {

@@ -1,12 +1,12 @@
-package restdocs.tool.export;
+package restdocs.tool.export.common.handler;
 
 import java.io.File;
 import java.io.IOException;
 
 public abstract class AbstractFileToolExportHandler implements ToolExportHandler {
 
-  protected File exportFile;
-  protected File docFile;
+  private File exportFile;
+  private File docFile;
 
   @Override
   public void initialize(File workingDirectory, String applicationName) throws IOException {
@@ -36,5 +36,13 @@ public abstract class AbstractFileToolExportHandler implements ToolExportHandler
     }
 
     return file;
+  }
+
+  protected File getExportFile() {
+    return exportFile;
+  }
+
+  protected File getDocFile() {
+    return docFile;
   }
 }

@@ -1,7 +1,7 @@
 package restdocs.tool.export.insomnia.handler;
 
 import org.springframework.restdocs.operation.Operation;
-import restdocs.tool.export.JSONAbstractFileToolExportHandler;
+import restdocs.tool.export.common.handler.JSONAbstractFileToolExportHandler;
 import restdocs.tool.export.insomnia.export.Export;
 import restdocs.tool.export.insomnia.export.InsomniaExporter;
 

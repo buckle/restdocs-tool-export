@@ -3,7 +3,7 @@ package restdocs.tool.export.insomnia.export.creators;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.operation.OperationRequest;
-import restdocs.tool.export.Creator;
+import restdocs.tool.export.common.creator.Creator;
 import restdocs.tool.export.insomnia.export.Body;
 
 public class BodyCreator implements Creator<Body, OperationRequest> {

@@ -1,6 +1,6 @@
 package restdocs.tool.export.insomnia.export.creators;
 
-import restdocs.tool.export.Creator;
+import restdocs.tool.export.common.creator.Creator;
 import restdocs.tool.export.insomnia.export.Resource;
 
 import static restdocs.tool.export.insomnia.export.InsomniaConstants.FOLDER_ID;
