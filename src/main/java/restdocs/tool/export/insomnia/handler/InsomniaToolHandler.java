@@ -14,12 +14,19 @@ public class InsomniaToolHandler implements ToolHandler {
   private InsomniaExporter insomniaExporter;
   private Documentor documentor;
 
+  public InsomniaToolHandler() {
+    this.insomniaExporter = new InsomniaExporter();
+    this.documentor = new DocumentorImpl();
+  }
+
+  public InsomniaToolHandler(InsomniaExporter insomniaExporter, Documentor documentor) {
+    this.insomniaExporter = insomniaExporter;
+    this.documentor = documentor;
+  }
+
   @Override
   public void initialize(File workingDirectory, String applicationName) throws IOException {
-    this.insomniaExporter = new InsomniaExporter();
     insomniaExporter.initialize(workingDirectory, applicationName, getToolName());
-
-    this.documentor = new DocumentorImpl();
     documentor.initialize(workingDirectory, applicationName, getToolName());
   }
 
