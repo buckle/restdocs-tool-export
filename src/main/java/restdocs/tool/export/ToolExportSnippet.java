@@ -3,7 +3,7 @@ package restdocs.tool.export;
 import org.springframework.restdocs.RestDocumentationContext;
 import org.springframework.restdocs.operation.Operation;
 import org.springframework.restdocs.snippet.Snippet;
-import restdocs.tool.export.insomnia.handler.InsomniaToolExportHandler;
+import restdocs.tool.export.insomnia.handler.InsomniaToolHandler;
 
 import java.io.File;
 import java.io.IOException;
@@ -11,7 +11,7 @@ import java.io.IOException;
 public class ToolExportSnippet implements Snippet {
 
   private static ToolExportSnippet toolExportSnippet;
-  private InsomniaToolExportHandler insomniaToolExportHandler;
+  private InsomniaToolHandler insomniaToolHandler;
   private String applicationName;
 
   private ToolExportSnippet(String applicationName) {
@@ -32,15 +32,15 @@ public class ToolExportSnippet implements Snippet {
     File outputDirectory = context.getOutputDirectory();
     init(outputDirectory);
 
-    insomniaToolExportHandler.handleOperation(operation);
+    insomniaToolHandler.handleOperation(operation);
   }
 
   protected void init(File outputDirectory) throws IOException {
     if(System.getProperty("restdocs.tool.export.initialized") == null) {
       System.setProperty("restdocs.tool.export.initialized", "true");
 
-      insomniaToolExportHandler = new InsomniaToolExportHandler();
-      insomniaToolExportHandler.initialize(outputDirectory, applicationName);
+      insomniaToolHandler = new InsomniaToolHandler();
+      insomniaToolHandler.initialize(outputDirectory, applicationName);
     }
   }
 }
