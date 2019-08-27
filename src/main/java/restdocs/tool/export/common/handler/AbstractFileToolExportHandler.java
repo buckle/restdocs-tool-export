@@ -17,10 +17,7 @@ public abstract class AbstractFileToolExportHandler implements ToolExportHandler
 
   protected File getToolDirectory(File workingDirectory) {
     File file = new File(workingDirectory.getAbsolutePath() + "/" + getToolName().toLowerCase() + "-download");
-
-    if(!file.exists()) {
-      file.mkdir();
-    }
+    file.mkdir();
 
     return file;
   }
