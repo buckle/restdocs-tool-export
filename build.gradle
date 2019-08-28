@@ -1,10 +1,8 @@
 plugins {
   id 'org.asciidoctor.convert' version '1.5.3'
-  id 'org.springframework.boot' version '2.1.6.RELEASE'
   id 'java'
+  id 'jacoco'
 }
-
-apply plugin: 'io.spring.dependency-management'
 
 group = 'restdocs-tool-export'
 version = '0.0.1-SNAPSHOT'
@@ -19,13 +17,16 @@ ext {
 }
 
 dependencies {
-  implementation('org.springframework.restdocs:spring-restdocs-mockmvc')
+  compile('org.springframework.restdocs:spring-restdocs-mockmvc:2.0.3.RELEASE')
+
   implementation('org.apache.commons:commons-lang3:3.9')
   implementation('commons-io:commons-io:2.6')
   implementation('org.apache.commons:commons-text:1.7')
+  implementation('com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.9.9')
+  implementation('org.slf4j:slf4j-api:1.7.28')
 
-  implementation('org.springframework.boot:spring-boot-starter-web')
-  testImplementation('org.springframework.boot:spring-boot-starter-test') {
+  testImplementation('org.springframework.boot:spring-boot-starter-web:2.1.7.RELEASE')
+  testImplementation('org.springframework.boot:spring-boot-starter-test:2.1.7.RELEASE') {
     exclude group: 'junit', module: 'junit'
   }
   testImplementation('org.mockito:mockito-core:2.27.0')
@@ -35,7 +36,33 @@ dependencies {
 
 test {
   outputs.dir snippetsDir
+  useJUnitPlatform()
+  finalizedBy jacocoTestReport
 }
+
+jacocoTestCoverageVerification {
+  dependsOn test
+  violationRules {
+    rule {
+      element = 'CLASS'
+      limit {
+        counter = 'LINE'
+        value = 'COVEREDRATIO'
+        minimum = 1.0
+      }
+    }
+    rule {
+      element = 'CLASS'
+      limit {
+        counter = 'BRANCH'
+        value = 'COVEREDRATIO'
+        minimum = 1.0
+      }
+    }
+  }
+}
+
+check.dependsOn jacocoTestCoverageVerification
 
 asciidoctor {
   inputs.dir snippetsDir

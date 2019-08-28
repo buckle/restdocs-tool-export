@@ -5,6 +5,8 @@ import java.io.IOException;
 
 public class RestDocsFileUtils {
 
+  private RestDocsFileUtils() {}
+
   public static File createToolDirectory(File workingDirectory, String toolName) {
     File file = new File(workingDirectory.getAbsolutePath() + "/" + toolName.toLowerCase() + "-download");
     file.mkdir();
