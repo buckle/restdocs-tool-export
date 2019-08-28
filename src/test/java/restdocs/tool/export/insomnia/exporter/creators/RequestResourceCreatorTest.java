@@ -17,14 +17,10 @@ import java.net.URI;
 import java.util.Set;
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static restdocs.tool.export.insomnia.exporter.InsomniaAssertionUtils.assertIdMatches;
-import static restdocs.tool.export.insomnia.exporter.InsomniaAssertionUtils.assertName;
-import static restdocs.tool.export.insomnia.exporter.InsomniaAssertionUtils.assertTimeEpoch;
+import static restdocs.tool.export.insomnia.exporter.InsomniaAssertionUtils.*;
 import static restdocs.tool.export.insomnia.exporter.InsomniaConstants.REQUEST_ID;
 import static restdocs.tool.export.insomnia.exporter.InsomniaConstants.REQUEST_TYPE;
 

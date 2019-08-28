@@ -12,18 +12,10 @@ import restdocs.tool.export.utils.TestFileUtils;
 import java.io.File;
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-import static restdocs.tool.export.insomnia.exporter.InsomniaConstants.FOLDER_ID;
-import static restdocs.tool.export.insomnia.exporter.InsomniaConstants.REQUEST_GROUP_TYPE;
-import static restdocs.tool.export.insomnia.exporter.InsomniaConstants.REQUEST_ID;
-import static restdocs.tool.export.insomnia.exporter.InsomniaConstants.REQUEST_TYPE;
+import static org.mockito.Mockito.*;
+import static restdocs.tool.export.insomnia.exporter.InsomniaConstants.*;
 import static restdocs.tool.export.insomnia.exporter.utils.InsomniaExportUtils.generateId;
 
 public class InsomniaExporterTest {

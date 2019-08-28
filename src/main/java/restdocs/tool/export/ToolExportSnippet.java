@@ -3,27 +3,45 @@ package restdocs.tool.export;
 import org.springframework.restdocs.RestDocumentationContext;
 import org.springframework.restdocs.operation.Operation;
 import org.springframework.restdocs.snippet.Snippet;
-import restdocs.tool.export.insomnia.handler.InsomniaToolHandler;
+import restdocs.tool.export.common.handler.ToolHandler;
+import restdocs.tool.export.common.handler.ToolHandlers;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ToolExportSnippet implements Snippet {
 
-  private static ToolExportSnippet toolExportSnippet;
-  private InsomniaToolHandler insomniaToolHandler;
+  private static final String INIT_PROPERTY = "restdocs.tool.export.initialized";
+
+  private static ToolExportSnippet instance;
+  private List<ToolHandler> toolHandlerImpls = new ArrayList<>();
   private String applicationName;
 
-  private ToolExportSnippet(String applicationName) {
+  private ToolExportSnippet(String applicationName, ToolHandlers... toolHandlers)
+      throws IllegalAccessException, InstantiationException {
+
     this.applicationName = applicationName;
+
+    for(ToolHandlers toolHandler : toolHandlers) {
+      toolHandlerImpls.add(toolHandler.getHandlerClass().newInstance());
+    }
   }
 
-  public static ToolExportSnippet get(String applicationName) {
-    if(toolExportSnippet == null) {
-      toolExportSnippet = new ToolExportSnippet(applicationName);
+  public static ToolExportSnippet getInstance(String applicationName, ToolHandlers... toolHandlers)
+      throws InstantiationException, IllegalAccessException {
+
+    if(instance == null) {
+      instance = new ToolExportSnippet(applicationName, toolHandlers);
     }
 
-    return toolExportSnippet;
+    return instance;
+  }
+
+  protected static void resetInstance() {
+    instance = null;
+    System.clearProperty(INIT_PROPERTY);
   }
 
   @Override
@@ -32,15 +50,22 @@ public class ToolExportSnippet implements Snippet {
     File outputDirectory = context.getOutputDirectory();
     init(outputDirectory);
 
-    insomniaToolHandler.handleOperation(operation);
+    for(ToolHandler toolHandler : getToolHandlers()) {
+      toolHandler.handleOperation(operation);
+    }
   }
 
   protected void init(File outputDirectory) throws IOException {
-    if(System.getProperty("restdocs.tool.export.initialized") == null) {
-      System.setProperty("restdocs.tool.export.initialized", "true");
+    if(System.getProperty(INIT_PROPERTY) == null) {
+      System.setProperty(INIT_PROPERTY, "true");
 
-      insomniaToolHandler = new InsomniaToolHandler();
-      insomniaToolHandler.initialize(outputDirectory, applicationName);
+      for(ToolHandler toolHandler : getToolHandlers()) {
+        toolHandler.initialize(outputDirectory, applicationName);
+      }
     }
+  }
+
+  protected List<ToolHandler> getToolHandlers() {
+    return toolHandlerImpls;
   }
 }

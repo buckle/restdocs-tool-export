@@ -7,9 +7,7 @@ import restdocs.tool.export.insomnia.exporter.Resource;
 
 import static restdocs.tool.export.insomnia.exporter.InsomniaConstants.REQUEST_ID;
 import static restdocs.tool.export.insomnia.exporter.InsomniaConstants.REQUEST_TYPE;
-import static restdocs.tool.export.insomnia.exporter.utils.InsomniaExportUtils.formatName;
-import static restdocs.tool.export.insomnia.exporter.utils.InsomniaExportUtils.generateId;
-import static restdocs.tool.export.insomnia.exporter.utils.InsomniaExportUtils.getEpochMillis;
+import static restdocs.tool.export.insomnia.exporter.utils.InsomniaExportUtils.*;
 
 public class RequestResourceCreator implements Creator<Resource, Operation> {
 

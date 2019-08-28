@@ -14,6 +14,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
+import restdocs.tool.export.common.handler.ToolHandlers;
 import restdocs.tool.export.utils.DocumentationUtil;
 
 import java.util.UUID;
@@ -37,11 +38,12 @@ public class ApplicationIT {
   protected String appName;
 
   @BeforeEach
-  void setUp() {
+  void setUp() throws Exception {
     this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
                                   .apply(documentationConfiguration(restDocumentation)
                                              .snippets()
-                                             .withAdditionalDefaults(ToolExportSnippet.get(appName)))
+                                             .withAdditionalDefaults(ToolExportSnippet.getInstance(appName,
+                                                                                                   ToolHandlers.INSOMNIA)))
                                   .build();
   }
 

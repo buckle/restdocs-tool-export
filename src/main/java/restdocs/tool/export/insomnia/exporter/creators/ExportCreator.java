@@ -5,9 +5,7 @@ import restdocs.tool.export.insomnia.exporter.Export;
 
 import java.time.LocalDateTime;
 
-import static restdocs.tool.export.insomnia.exporter.InsomniaConstants.EXPORT_FORMAT;
-import static restdocs.tool.export.insomnia.exporter.InsomniaConstants.EXPORT_SOURCE;
-import static restdocs.tool.export.insomnia.exporter.InsomniaConstants.EXPORT_TYPE;
+import static restdocs.tool.export.insomnia.exporter.InsomniaConstants.*;
 
 public class ExportCreator implements Creator<Export, String> {
 

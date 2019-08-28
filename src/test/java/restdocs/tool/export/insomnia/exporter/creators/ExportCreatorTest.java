@@ -8,9 +8,7 @@ import java.time.ZoneId;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static restdocs.tool.export.insomnia.exporter.InsomniaAssertionUtils.assertTimeEpoch;
-import static restdocs.tool.export.insomnia.exporter.InsomniaConstants.EXPORT_FORMAT;
-import static restdocs.tool.export.insomnia.exporter.InsomniaConstants.EXPORT_SOURCE;
-import static restdocs.tool.export.insomnia.exporter.InsomniaConstants.EXPORT_TYPE;
+import static restdocs.tool.export.insomnia.exporter.InsomniaConstants.*;
 
 public class ExportCreatorTest {
 
