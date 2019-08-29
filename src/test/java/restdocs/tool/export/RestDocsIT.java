@@ -44,7 +44,7 @@ public class RestDocsIT {
 
   @BeforeEach
   void setUp() throws Exception {
-    toolExportSnippet = ToolExportSnippet.getInstance(appName, ToolHandlers.INSOMNIA);
+    toolExportSnippet = ToolExportSnippet.initInstance(appName, ToolHandlers.INSOMNIA);
   }
 
   @Test
