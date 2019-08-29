@@ -3,9 +3,10 @@ plugins {
   id 'java'
   id 'jacoco'
   id 'maven-publish'
+  id 'signing'
 }
 
-group = 'restdocs-tool-export'
+group = 'com.github.buckle'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '1.8'
 
@@ -40,13 +41,47 @@ task sourceJar(type: Jar) {
   archiveClassifier = 'sources'
 }
 
+task javadocJar(type: Jar) {
+  from javadoc
+  archiveClassifier = 'javadoc'
+}
+
 publishing {
   publications {
     mavenJava(MavenPublication) {
       from components.java
       artifact sourceJar
+      artifact javadocJar
+      pom {
+        name = 'Restdocs Tool Export'
+        description = 'Generates AsciiDoc snippets via Spring Restdocs that are exports for Insomnia or Postman that can be download and imported.'
+        url = 'https://github.com/buckle/restdocs-tool-export'
+        licenses {
+          license {
+            name = 'The Apache License, Version 2.0'
+            url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+          }
+        }
+        developers {
+          developer {
+            id = 'stacyp'
+            name = 'Stacy Peace'
+            email = 'stacy.peace@buckle.com'
+          }
+        }
+        scm {
+          connection = 'scm:git:git@github.com:buckle/restdocs-tool-export.git'
+          developerConnection = 'scm:git:git@github.com:buckle/restdocs-tool-export.git'
+          url = 'https://github.com/buckle/restdocs-tool-export'
+        }
+      }
     }
   }
+}
+
+signing {
+  useGpgCmd()
+  sign publishing.publications.mavenJava
 }
 
 test {
