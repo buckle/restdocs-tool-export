@@ -1,19 +1,16 @@
 package restdocs.tool.export.utils;
 
 import org.springframework.restdocs.mockmvc.RestDocumentationResultHandler;
+import restdocs.tool.export.ToolExportSnippet;
 
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
-import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
-import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
-import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
-import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
-import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
-import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
+import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.restdocs.request.RequestDocumentation.*;
 
 public class DocumentationUtil {
 
-  public static RestDocumentationResultHandler documentEcho() {
-    return document("echo-test",
+  public static RestDocumentationResultHandler documentEcho(String name, ToolExportSnippet toolExportSnippet) {
+    return document(name,
                     pathParameters(parameterWithName("pathVariable")
                                        .description("path variable")),
                     requestParameters(parameterWithName("param1")
@@ -29,7 +26,8 @@ public class DocumentationUtil {
                                    fieldWithPath("postData.sField1")
                                        .description("string field 1"),
                                    fieldWithPath("postData.iField2")
-                                       .description("integer field 2"))
+                                       .description("integer field 2")),
+                    toolExportSnippet
     );
   }
 

@@ -5,7 +5,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static restdocs.tool.export.insomnia.exporter.InsomniaAssertionUtils.*;
+import static restdocs.tool.export.insomnia.utils.InsomniaAssertionUtils.*;
 import static restdocs.tool.export.insomnia.exporter.InsomniaConstants.FOLDER_ID;
 
 @ExtendWith(MockitoExtension.class)
