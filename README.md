@@ -2,6 +2,9 @@
 
 Generates AsciiDoc snippets via Spring Restdocs that are exports for Insomnia or Postman that can be download and imported. 
 
+## Artifact Version
+`com.github.buckle:restdocs-tool-export:0.0.1-RELEASE`
+
 ## Test Configuration
 
 `ToolExportSnippet` needs to be initialized and called for each documentation request. Then include the appropriate snippet in your docs. 
@@ -18,7 +21,7 @@ Generates AsciiDoc snippets via Spring Restdocs that are exports for Insomnia or
 
 ### Document
 ```java
-    document("reqeust-test",
+    document("request-test",
              pathParameters(parameterWithName("key")
                                        .description("Test path parameter")
              ),
