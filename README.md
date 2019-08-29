@@ -7,7 +7,9 @@ Generates AsciiDoc snippets via Spring Restdocs that are exports for Insomnia or
 
 ## Test Configuration
 
-`ToolExportSnippet` needs to be initialized and called for each documentation request. Then include the appropriate snippet in your docs. 
+`ToolExportSnippet` needs to be initialized and then called for each documentation request. Once integration tests have ran 
+include the generated Insomnia/Postman snippet in your AsciiDoc file. The generated link contains an export of the included tool. 
+A very simple example can be seen in the integration test [RestDocsIT](src/test/java/restdocs/tool/export/RestDocsIT.java).
 
 ### Initialize
 ```java
