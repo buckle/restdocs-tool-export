@@ -29,13 +29,17 @@ public class ToolExportSnippet implements Snippet {
     }
   }
 
-  public static ToolExportSnippet getInstance(String applicationName, ToolHandlers... toolHandlers)
+  public static ToolExportSnippet initInstance(String applicationName, ToolHandlers... toolHandlers)
       throws InstantiationException, IllegalAccessException {
 
     if(instance == null) {
       instance = new ToolExportSnippet(applicationName, toolHandlers);
     }
 
+    return instance;
+  }
+
+  public static ToolExportSnippet getInstance() {
     return instance;
   }
 

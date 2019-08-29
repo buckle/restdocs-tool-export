@@ -37,25 +37,36 @@ public class ToolExportSnippetTest {
   }
 
   @Test
-  void getInstance() throws Exception {
-    ToolExportSnippet instance = ToolExportSnippet.getInstance(applicationName, ToolHandlers.INSOMNIA);
+  void initInstance() throws Exception {
+    ToolExportSnippet instance = ToolExportSnippet.initInstance(applicationName, ToolHandlers.INSOMNIA);
 
     assertNotNull(instance);
     assertFalse(instance.getToolHandlers().isEmpty());
   }
 
   @Test
-  void getInstanceWhenAlreadyCreated() throws Exception {
-    ToolExportSnippet instance = ToolExportSnippet.getInstance(applicationName, ToolHandlers.INSOMNIA);
-    ToolExportSnippet instance2 = ToolExportSnippet.getInstance(applicationName, ToolHandlers.INSOMNIA);
+  void initInstanceWhenAlreadyCreated() throws Exception {
+    ToolExportSnippet instance = ToolExportSnippet.initInstance(applicationName, ToolHandlers.INSOMNIA);
+    ToolExportSnippet instance2 = ToolExportSnippet.initInstance(applicationName, ToolHandlers.INSOMNIA);
 
     assertNotNull(instance);
     assertEquals(instance, instance2);
   }
 
   @Test
+  void getInstanceWhenNotInitialized() {
+     assertNull(ToolExportSnippet.getInstance());
+  }
+
+  @Test
+  void getInstanceWhenInitialized() throws Exception {
+    ToolExportSnippet instance = ToolExportSnippet.initInstance(applicationName, ToolHandlers.INSOMNIA);
+    assertEquals(instance, ToolExportSnippet.getInstance());
+  }
+
+  @Test
   void document() throws Exception {
-    ToolExportSnippet toolExportSnippet = spy(ToolExportSnippet.getInstance(applicationName, ToolHandlers.INSOMNIA));
+    ToolExportSnippet toolExportSnippet = spy(ToolExportSnippet.initInstance(applicationName, ToolHandlers.INSOMNIA));
     ToolHandler toolHandler = mock(ToolHandler.class);
     doReturn(Arrays.asList(toolHandler)).when(toolExportSnippet).getToolHandlers();
 
@@ -67,7 +78,7 @@ public class ToolExportSnippetTest {
 
   @Test
   void documentWhenAlreadyInitialized() throws Exception {
-    ToolExportSnippet toolExportSnippet = spy(ToolExportSnippet.getInstance(applicationName, ToolHandlers.INSOMNIA));
+    ToolExportSnippet toolExportSnippet = spy(ToolExportSnippet.initInstance(applicationName, ToolHandlers.INSOMNIA));
     ToolHandler toolHandler = mock(ToolHandler.class);
     doReturn(Arrays.asList(toolHandler)).when(toolExportSnippet).getToolHandlers();
 

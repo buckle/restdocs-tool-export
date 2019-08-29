@@ -2,6 +2,7 @@ plugins {
   id 'org.asciidoctor.convert' version '1.5.3'
   id 'java'
   id 'jacoco'
+  id 'maven-publish'
 }
 
 group = 'restdocs-tool-export'
@@ -18,12 +19,12 @@ ext {
 
 dependencies {
   compile('org.springframework.restdocs:spring-restdocs-mockmvc:2.0.3.RELEASE')
+  compile('org.slf4j:slf4j-api:1.7.28')
 
   implementation('org.apache.commons:commons-lang3:3.9')
   implementation('commons-io:commons-io:2.6')
   implementation('org.apache.commons:commons-text:1.7')
   implementation('com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.9.9')
-  implementation('org.slf4j:slf4j-api:1.7.28')
 
   testImplementation('org.springframework.boot:spring-boot-starter-web:2.1.7.RELEASE')
   testImplementation('org.springframework.boot:spring-boot-starter-test:2.1.7.RELEASE') {
@@ -32,6 +33,20 @@ dependencies {
   testImplementation('org.mockito:mockito-core:2.27.0')
   testImplementation('org.mockito:mockito-junit-jupiter:2.27.0')
   testImplementation('org.junit.jupiter:junit-jupiter:5.4.2')
+}
+
+task sourceJar(type: Jar) {
+  from sourceSets.main.allJava
+  archiveClassifier = 'sources'
+}
+
+publishing {
+  publications {
+    mavenJava(MavenPublication) {
+      from components.java
+      artifact sourceJar
+    }
+  }
 }
 
 test {
