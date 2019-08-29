@@ -9,7 +9,7 @@ import java.net.URI;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static restdocs.tool.export.insomnia.exporter.InsomniaAssertionUtils.assertIdMatches;
+import static restdocs.tool.export.insomnia.utils.InsomniaAssertionUtils.assertIdMatches;
 import static restdocs.tool.export.insomnia.exporter.InsomniaConstants.PAIR_ID;
 import static restdocs.tool.export.insomnia.exporter.utils.PairUtils.findPairByNameValue;
 

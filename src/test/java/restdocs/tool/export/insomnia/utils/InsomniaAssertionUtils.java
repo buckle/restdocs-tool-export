@@ -1,4 +1,4 @@
-package restdocs.tool.export.insomnia.exporter;
+package restdocs.tool.export.insomnia.utils;
 
 import org.apache.commons.text.WordUtils;
 import org.junit.platform.commons.util.StringUtils;

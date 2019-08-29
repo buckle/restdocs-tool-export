@@ -15,7 +15,7 @@ import java.util.Set;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.http.HttpHeaders.ACCEPT;
 import static org.springframework.http.HttpHeaders.ALLOW;
-import static restdocs.tool.export.insomnia.exporter.InsomniaAssertionUtils.assertIdMatches;
+import static restdocs.tool.export.insomnia.utils.InsomniaAssertionUtils.assertIdMatches;
 import static restdocs.tool.export.utils.RestDocUtils.findHttpHeaderForName;
 
 public class HeadersCreatorTest {
