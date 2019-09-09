@@ -1,5 +1,8 @@
 package restdocs.tool.export.postman.exporter;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Item {
 
   private String name;

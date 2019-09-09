@@ -6,6 +6,8 @@ import java.util.Set;
 
 public class QueryParamUtils {
 
+  private QueryParamUtils() {}
+
   public static QueryParam findQueryParamByKeyValue(Set<QueryParam> queryParams, String key, String value) {
     if(queryParams != null && key != null && value != null) {
       return queryParams.stream()

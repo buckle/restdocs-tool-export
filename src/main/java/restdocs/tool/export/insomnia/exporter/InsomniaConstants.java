@@ -1,18 +1,20 @@
 package restdocs.tool.export.insomnia.exporter;
 
-public interface InsomniaConstants {
+public class InsomniaConstants {
+
+  private InsomniaConstants() {}
 
   // TYPES
-  String EXPORT_TYPE = "export";
-  String REQUEST_GROUP_TYPE = "request_group";
-  String REQUEST_TYPE = "request";
+  public static final String EXPORT_TYPE = "export";
+  public static final String REQUEST_GROUP_TYPE = "request_group";
+  public static final String REQUEST_TYPE = "request";
 
   // ID MARKERS
-  String REQUEST_ID = "req_";
-  String PAIR_ID = "pair_";
-  String FOLDER_ID = "fld_";
+  public static final String REQUEST_ID = "req_";
+  public static final String PAIR_ID = "pair_";
+  public static final String FOLDER_ID = "fld_";
 
   // EXPORT
-  int EXPORT_FORMAT = 4;
-  String EXPORT_SOURCE = "restdocs.tool.export.insomnia";
+  public static final int EXPORT_FORMAT = 4;
+  public static final String EXPORT_SOURCE = "restdocs.tool.export.insomnia";
 }
