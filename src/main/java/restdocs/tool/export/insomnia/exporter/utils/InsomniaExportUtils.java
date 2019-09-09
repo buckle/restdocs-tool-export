@@ -1,7 +1,5 @@
 package restdocs.tool.export.insomnia.exporter.utils;
 
-import org.apache.commons.text.WordUtils;
-
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.UUID;
@@ -19,15 +17,6 @@ public class InsomniaExportUtils {
                         .atZone(ZoneId.systemDefault())
                         .toInstant()
                         .toEpochMilli();
-  }
-
-  public static String formatName(String name) {
-    if(name != null) {
-      return WordUtils.capitalize(name.replaceAll("[^a-zA-Z0-9]", " ")
-                                      .replaceAll(" +", " "));
-    }
-
-    return null;
   }
 
   protected static String formatBaseId(String baseId) {

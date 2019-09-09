@@ -1,4 +1,4 @@
-package restdocs.tool.export.common.file;
+package restdocs.tool.export.common.utils;
 
 import java.io.File;
 import java.io.IOException;

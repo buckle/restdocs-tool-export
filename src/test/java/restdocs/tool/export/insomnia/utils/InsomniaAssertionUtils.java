@@ -1,13 +1,11 @@
 package restdocs.tool.export.insomnia.utils;
 
-import org.apache.commons.text.WordUtils;
-import org.junit.platform.commons.util.StringUtils;
-
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class InsomniaAssertionUtils {
 
@@ -21,12 +19,5 @@ public class InsomniaAssertionUtils {
 
     assertTrue(time.isAfter(LocalDateTime.now().minusSeconds(3)));
     assertTrue(time.isBefore(LocalDateTime.now().plusSeconds(3)));
-  }
-
-  public static void assertName(String name, String key) {
-    assertFalse(StringUtils.isBlank(name));
-    assertNotNull(name);
-    assertTrue(name.matches("[a-zA-Z0-9 ]+"));
-    assertTrue(name.contains(WordUtils.capitalize(key)));
   }
 }
