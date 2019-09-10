@@ -3,7 +3,7 @@
 Generates AsciiDoc snippets via Spring Restdocs that are exports for Insomnia or Postman that can be download and imported. 
 
 ## Artifact Version
-`com.github.buckle:restdocs-tool-export:0.0.1-RELEASE`
+`com.github.buckle:restdocs-tool-export:0.0.2-RELEASE`
 
 ## Test Configuration
 
