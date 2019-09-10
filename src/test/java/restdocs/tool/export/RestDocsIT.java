@@ -25,6 +25,7 @@ import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuild
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static restdocs.tool.export.CrossTestData.*;
 import static restdocs.tool.export.insomnia.utils.InsomniaDocumentationAssertion.assertInsomnia;
+import static restdocs.tool.export.postman.utils.PostmanDocumentationAssertion.assertPostman;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(properties = {"spring.application.name=test_application"}, classes = TestApplication.class)
@@ -44,7 +45,7 @@ public class RestDocsIT {
 
   @BeforeEach
   void setUp() throws Exception {
-    toolExportSnippet = ToolExportSnippet.initInstance(appName, ToolHandlers.INSOMNIA);
+    toolExportSnippet = ToolExportSnippet.initInstance(appName, ToolHandlers.INSOMNIA, ToolHandlers.POSTMAN);
   }
 
   @Test
@@ -58,7 +59,9 @@ public class RestDocsIT {
            .andExpect(status().isOk())
            .andDo(DocumentationUtil.documentEcho("post-test", toolExportSnippet));
 
-    assertInsomnia(new AssertionData(postData, pathVariable, parameter, headerXKey, "Post Test"));
+    AssertionData assertionData = new AssertionData(postData, pathVariable, parameter, headerXKey, "Post Test");
+    assertInsomnia(assertionData);
+    assertPostman(assertionData);
   }
 
   /**
@@ -88,7 +91,10 @@ public class RestDocsIT {
            .andExpect(status().isOk())
            .andDo(DocumentationUtil.documentEcho("post-test-2", toolExportSnippet));
 
-    assertInsomnia(new AssertionData(CrossTestData.postData, CrossTestData.pathVariable, CrossTestData.parameter, CrossTestData.headerXKey, "Post Test"),
-                   new AssertionData(postData, pathVariable, parameter, headerXKey, "Post Test 2"));
+    AssertionData crossTestAssertionData = new AssertionData(CrossTestData.postData, CrossTestData.pathVariable, CrossTestData.parameter, CrossTestData.headerXKey, "Post Test");
+    AssertionData assertionData = new AssertionData(postData, pathVariable, parameter, headerXKey, "Post Test 2");
+
+    assertInsomnia(crossTestAssertionData, assertionData);
+    assertPostman(crossTestAssertionData, assertionData);
   }
 }

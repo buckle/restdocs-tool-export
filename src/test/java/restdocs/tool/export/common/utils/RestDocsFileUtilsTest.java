@@ -1,8 +1,9 @@
-package restdocs.tool.export.common.file;
+package restdocs.tool.export.common.utils;
 
 import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import restdocs.tool.export.common.utils.RestDocsFileUtils;
 import restdocs.tool.export.utils.TestFileUtils;
 
 import java.io.File;

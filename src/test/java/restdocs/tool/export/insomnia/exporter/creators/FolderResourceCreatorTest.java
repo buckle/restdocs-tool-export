@@ -5,10 +5,14 @@ import restdocs.tool.export.insomnia.exporter.Resource;
 
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static restdocs.tool.export.insomnia.utils.InsomniaAssertionUtils.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static restdocs.tool.export.common.assertion.AssertionUtils.assertName;
 import static restdocs.tool.export.insomnia.exporter.InsomniaConstants.FOLDER_ID;
 import static restdocs.tool.export.insomnia.exporter.InsomniaConstants.REQUEST_GROUP_TYPE;
+import static restdocs.tool.export.insomnia.utils.InsomniaAssertionUtils.assertIdMatches;
+import static restdocs.tool.export.insomnia.utils.InsomniaAssertionUtils.assertTimeEpoch;
 
 public class FolderResourceCreatorTest {
 

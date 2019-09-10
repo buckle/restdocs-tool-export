@@ -17,7 +17,7 @@ A very simple example can be seen in the integration test [RestDocsIT](src/test/
 
   @BeforeEach
   void setUp() throws Exception {
-    ToolExportSnippet.initInstance(applicationName, ToolHandlers.INSOMNIA);
+    ToolExportSnippet.initInstance(applicationName, ToolHandlers.INSOMNIA, ToolHandlers.POSTMAN);
   }
 ```
 
@@ -38,4 +38,7 @@ A very simple example can be seen in the integration test [RestDocsIT](src/test/
 == Downloads
 Insomnia
 include::{snippets}/insomnia-download/insomnia.adoc[]
+
+Postman
+include::{snippets}/postman-download/postman.adoc[]
 ```

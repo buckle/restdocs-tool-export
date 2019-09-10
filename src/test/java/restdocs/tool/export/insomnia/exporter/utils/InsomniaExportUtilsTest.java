@@ -4,9 +4,12 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static restdocs.tool.export.insomnia.utils.InsomniaAssertionUtils.*;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static restdocs.tool.export.insomnia.exporter.InsomniaConstants.FOLDER_ID;
+import static restdocs.tool.export.insomnia.utils.InsomniaAssertionUtils.assertIdMatches;
+import static restdocs.tool.export.insomnia.utils.InsomniaAssertionUtils.assertTimeEpoch;
 
 @ExtendWith(MockitoExtension.class)
 public class InsomniaExportUtilsTest {
@@ -24,21 +27,6 @@ public class InsomniaExportUtilsTest {
     Long epochMillis = InsomniaExportUtils.getEpochMillis();
 
     assertTimeEpoch(epochMillis);
-  }
-
-  @Test
-  void formatName() {
-    String name = "blah-blah123*&&^%$#%&*(Hah";
-
-    String formattedName = InsomniaExportUtils.formatName(name);
-
-    assertName(formattedName, "blah");
-    assertEquals("Blah Blah123 Hah", formattedName);
-  }
-
-  @Test
-  void formatNameWhenNull() {
-    assertNull(InsomniaExportUtils.formatName(null));
   }
 
   @Test

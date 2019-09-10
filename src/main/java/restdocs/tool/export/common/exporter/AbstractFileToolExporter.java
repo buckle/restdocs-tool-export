@@ -1,6 +1,6 @@
 package restdocs.tool.export.common.exporter;
 
-import restdocs.tool.export.common.file.RestDocsFileUtils;
+import restdocs.tool.export.common.utils.RestDocsFileUtils;
 
 import java.io.File;
 import java.io.IOException;
