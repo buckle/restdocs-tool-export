@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.restdocs.operation.Parameters;
 import org.springframework.restdocs.operation.QueryStringParser;
 import restdocs.tool.export.postman.exporter.QueryParam;
-import restdocs.tool.export.postman.utils.QueryParamUtils;
+import restdocs.tool.export.postman.exporter.utils.QueryParamUtils;
 
 import java.net.URI;
 import java.util.Set;

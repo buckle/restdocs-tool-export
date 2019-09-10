@@ -1,4 +1,4 @@
-package restdocs.tool.export.postman.utils;
+package restdocs.tool.export.postman.exporter.utils;
 
 import org.junit.jupiter.api.Test;
 import org.mockito.internal.util.collections.Sets;

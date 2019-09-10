@@ -7,7 +7,7 @@ import restdocs.tool.export.postman.exporter.QueryParam;
 import java.util.HashSet;
 import java.util.Set;
 
-import static restdocs.tool.export.postman.utils.QueryParamUtils.findQueryParamByKeyValue;
+import static restdocs.tool.export.postman.exporter.utils.QueryParamUtils.findQueryParamByKeyValue;
 
 public class QueryParametersCreator implements Creator<Set<QueryParam>, Parameters> {
 

@@ -1,4 +1,4 @@
-package restdocs.tool.export.postman.utils;
+package restdocs.tool.export.postman.exporter.utils;
 
 import restdocs.tool.export.postman.exporter.QueryParam;
 
