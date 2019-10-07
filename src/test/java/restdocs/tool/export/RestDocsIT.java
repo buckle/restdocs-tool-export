@@ -24,6 +24,7 @@ import java.util.UUID;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static restdocs.tool.export.CrossTestData.*;
+import static restdocs.tool.export.common.ExportProperties.APPLICATION_NAME;
 import static restdocs.tool.export.insomnia.utils.InsomniaDocumentationAssertion.assertInsomnia;
 import static restdocs.tool.export.postman.utils.PostmanDocumentationAssertion.assertPostman;
 
@@ -37,15 +38,14 @@ public class RestDocsIT {
   @Autowired protected MockMvc mockMvc;
   @Value("${spring.application.name}") protected String appName;
 
-  private ToolExportSnippet toolExportSnippet;
-
   static {
     ITTestUtils.cleanSnippetsDir();
   }
 
   @BeforeEach
   void setUp() throws Exception {
-    toolExportSnippet = ToolExportSnippet.initInstance(appName, ToolHandlers.INSOMNIA, ToolHandlers.POSTMAN);
+    ToolExportSnippet.initInstance(ToolHandlers.INSOMNIA, ToolHandlers.POSTMAN);
+    ToolExportSnippet.setProperty(APPLICATION_NAME, appName);
   }
 
   @Test
@@ -57,7 +57,7 @@ public class RestDocsIT {
                         .content(objectMapper.writeValueAsBytes(postData))
                         .secure(true))
            .andExpect(status().isOk())
-           .andDo(DocumentationUtil.documentEcho("post-test", toolExportSnippet));
+           .andDo(DocumentationUtil.documentEcho("post-test"));
 
     AssertionData assertionData = new AssertionData(postData, pathVariable, parameter, headerXKey, "Post Test");
     assertInsomnia(assertionData);
@@ -89,7 +89,7 @@ public class RestDocsIT {
                         .content(objectMapper.writeValueAsBytes(postData))
                         .secure(true))
            .andExpect(status().isOk())
-           .andDo(DocumentationUtil.documentEcho("post-test-2", toolExportSnippet));
+           .andDo(DocumentationUtil.documentEcho("post-test-2"));
 
     AssertionData crossTestAssertionData = new AssertionData(CrossTestData.postData, CrossTestData.pathVariable, CrossTestData.parameter, CrossTestData.headerXKey, "Post Test");
     AssertionData assertionData = new AssertionData(postData, pathVariable, parameter, headerXKey, "Post Test 2");

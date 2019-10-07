@@ -42,7 +42,7 @@ public class ToolExportSnippetTest {
 
   @Test
   void initInstance() throws Exception {
-    ToolExportSnippet instance = ToolExportSnippet.initInstance(applicationName, ToolHandlers.INSOMNIA);
+    ToolExportSnippet instance = ToolExportSnippet.initInstance(ToolHandlers.INSOMNIA);
 
     assertNotNull(instance);
     assertFalse(instance.getToolHandlers().isEmpty());
@@ -50,8 +50,8 @@ public class ToolExportSnippetTest {
 
   @Test
   void initInstanceWhenAlreadyCreated() throws Exception {
-    ToolExportSnippet instance = ToolExportSnippet.initInstance(applicationName, ToolHandlers.INSOMNIA);
-    ToolExportSnippet instance2 = ToolExportSnippet.initInstance(applicationName, ToolHandlers.INSOMNIA);
+    ToolExportSnippet instance = ToolExportSnippet.initInstance(ToolHandlers.INSOMNIA);
+    ToolExportSnippet instance2 = ToolExportSnippet.initInstance(ToolHandlers.INSOMNIA);
 
     assertNotNull(instance);
     assertEquals(instance, instance2);
@@ -64,42 +64,78 @@ public class ToolExportSnippetTest {
 
   @Test
   void getInstanceWhenInitialized() throws Exception {
-    ToolExportSnippet instance = ToolExportSnippet.initInstance(applicationName, ToolHandlers.INSOMNIA);
+    ToolExportSnippet instance = ToolExportSnippet.initInstance(ToolHandlers.INSOMNIA);
     assertEquals(instance, ToolExportSnippet.getInstance());
   }
 
   @Test
   void document() throws Exception {
-    ToolExportSnippet toolExportSnippet = spy(ToolExportSnippet.initInstance(applicationName, ToolHandlers.INSOMNIA));
+    ToolExportSnippet toolExportSnippet = spy(ToolExportSnippet.initInstance(ToolHandlers.INSOMNIA));
+    ToolExportSnippet.setProperty(APPLICATION_NAME, applicationName);
     ToolHandler toolHandler = mock(ToolHandler.class);
     doReturn(Arrays.asList(toolHandler)).when(toolExportSnippet).getToolHandlers();
 
     toolExportSnippet.document(operation);
 
     InOrder inOrder = Mockito.inOrder(operation, toolHandler, toolExportSnippet);
-    inOrder.verify(toolExportSnippet, times(1)).setAttributes(operation);
+    inOrder.verify(toolExportSnippet, times(1)).setDefaultProperties();
     inOrder.verify(toolHandler, times(1)).initialize(outputDirectory, applicationName);
+    inOrder.verify(toolExportSnippet, times(1)).setAttributes(operation);
     inOrder.verify(toolHandler, times(1)).handleOperation(operation);
   }
 
   @Test
   void documentWhenAlreadyInitialized() throws Exception {
-    ToolExportSnippet toolExportSnippet = spy(ToolExportSnippet.initInstance(applicationName, ToolHandlers.INSOMNIA));
+    ToolExportSnippet toolExportSnippet = spy(ToolExportSnippet.initInstance(ToolHandlers.INSOMNIA));
+    ToolExportSnippet.setProperty(APPLICATION_NAME, applicationName);
     ToolHandler toolHandler = mock(ToolHandler.class);
     doReturn(Arrays.asList(toolHandler)).when(toolExportSnippet).getToolHandlers();
 
     toolExportSnippet.document(operation);
     toolExportSnippet.document(operation);
 
+    verify(toolExportSnippet, times(1)).setDefaultProperties();
     verify(toolHandler, times(1)).initialize(outputDirectory, applicationName);
-    verify(toolHandler, times(2)).handleOperation(operation);
+    verify(toolExportSnippet, times(2)).setAttributes(operation);
     verify(toolHandler, times(2)).handleOperation(operation);
   }
 
   @Test
+  void setAndGetPropertyWhenString() throws Exception {
+    String propertyName = "some.name";
+    String value = "some.value";
+
+    ToolExportSnippet toolExportSnippet = spy(ToolExportSnippet.initInstance(ToolHandlers.INSOMNIA));
+
+    ToolExportSnippet.setProperty(propertyName, value);
+
+    assertEquals(value, toolExportSnippet.getProperty(propertyName, String.class));
+  }
+
+  @Test
+  void setAndGetPropertyWhenInteger() throws Exception {
+    String propertyName = "some.name";
+    Integer value = 77;
+
+    ToolExportSnippet toolExportSnippet = spy(ToolExportSnippet.initInstance(ToolHandlers.INSOMNIA));
+
+    ToolExportSnippet.setProperty(propertyName, value);
+
+    assertEquals(value, toolExportSnippet.getProperty(propertyName, Integer.class).intValue());
+  }
+
+  @Test
+  void setDefaultProperties() throws Exception {
+    ToolExportSnippet toolExportSnippet = spy(ToolExportSnippet.initInstance(ToolHandlers.INSOMNIA));
+    toolExportSnippet.setDefaultProperties();
+
+    assertTrue(toolExportSnippet.getProperty(ExportProperties.HOST_VARIABLE_ENABLED, Boolean.class));
+  }
+
+  @Test
   void setAttributes() throws Exception {
-    ToolExportSnippet toolExportSnippet = spy(ToolExportSnippet.initInstance(applicationName, ToolHandlers.INSOMNIA));
-    assertNull(operation.getAttributes().get(APPLICATION_NAME));
+    ToolExportSnippet toolExportSnippet = spy(ToolExportSnippet.initInstance(ToolHandlers.INSOMNIA));
+    ToolExportSnippet.setProperty(APPLICATION_NAME, applicationName);
 
     toolExportSnippet.setAttributes(operation);
 

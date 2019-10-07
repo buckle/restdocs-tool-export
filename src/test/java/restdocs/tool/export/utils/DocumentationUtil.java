@@ -9,7 +9,7 @@ import static org.springframework.restdocs.request.RequestDocumentation.*;
 
 public class DocumentationUtil {
 
-  public static RestDocumentationResultHandler documentEcho(String name, ToolExportSnippet toolExportSnippet) {
+  public static RestDocumentationResultHandler documentEcho(String name) {
     return document(name,
                     pathParameters(parameterWithName("pathVariable")
                                        .description("path variable")),
@@ -27,7 +27,7 @@ public class DocumentationUtil {
                                        .description("string field 1"),
                                    fieldWithPath("postData.iField2")
                                        .description("integer field 2")),
-                    toolExportSnippet
+                    ToolExportSnippet.getInstance()
     );
   }
 
