@@ -8,7 +8,7 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
-import static restdocs.tool.export.common.assertion.AssertionUtils.assertName;
+import static restdocs.tool.export.common.assertion.AssertionUtils.assertNameReadably;
 import static restdocs.tool.export.insomnia.exporter.InsomniaConstants.FOLDER_ID;
 import static restdocs.tool.export.insomnia.exporter.InsomniaConstants.REQUEST_GROUP_TYPE;
 import static restdocs.tool.export.insomnia.utils.InsomniaAssertionUtils.assertIdMatches;
@@ -26,7 +26,7 @@ public class FolderResourceCreatorTest {
     assertNotNull(folderResource);
     assertIdMatches(FOLDER_ID, folderResource.getId());
     assertEquals(REQUEST_GROUP_TYPE, folderResource.getType());
-    assertName(folderResource.getName(), baseName);
+    assertNameReadably(folderResource.getName(), baseName);
     assertTimeEpoch(folderResource.getCreated());
     assertTimeEpoch(folderResource.getModified());
   }

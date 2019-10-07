@@ -22,7 +22,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static restdocs.tool.export.common.assertion.AssertionUtils.assertName;
+import static restdocs.tool.export.common.assertion.AssertionUtils.assertNameReadably;
 import static restdocs.tool.export.insomnia.exporter.InsomniaConstants.REQUEST_ID;
 import static restdocs.tool.export.insomnia.exporter.InsomniaConstants.REQUEST_TYPE;
 import static restdocs.tool.export.insomnia.utils.InsomniaAssertionUtils.assertIdMatches;
@@ -75,7 +75,7 @@ public class RequestResourceCreatorTest {
     assertNotNull(resource);
     assertIdMatches(REQUEST_ID, resource.getId());
     assertEquals(REQUEST_TYPE, resource.getType());
-    assertName(resource.getName(), baseName);
+    assertNameReadably(resource.getName(), baseName);
     assertEquals(HttpMethod.GET.toString(), resource.getMethod());
     assertEquals(uri.toString(), resource.getUrl());
     assertEquals(headers, resource.getHeaders());

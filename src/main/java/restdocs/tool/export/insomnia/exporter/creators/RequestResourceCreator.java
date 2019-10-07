@@ -5,7 +5,7 @@ import org.springframework.restdocs.operation.OperationRequest;
 import restdocs.tool.export.common.creator.Creator;
 import restdocs.tool.export.insomnia.exporter.Resource;
 
-import static restdocs.tool.export.common.utils.ExportUtils.formatName;
+import static restdocs.tool.export.common.utils.ExportUtils.formatNameReadably;
 import static restdocs.tool.export.insomnia.exporter.InsomniaConstants.REQUEST_ID;
 import static restdocs.tool.export.insomnia.exporter.InsomniaConstants.REQUEST_TYPE;
 import static restdocs.tool.export.insomnia.exporter.utils.InsomniaExportUtils.generateId;
@@ -38,7 +38,7 @@ public class RequestResourceCreator implements Creator<Resource, Operation> {
       Resource resource = new Resource();
       resource.setId(generateId(REQUEST_ID));
       resource.setType(REQUEST_TYPE);
-      resource.setName(formatName(operation.getName()));
+      resource.setName(formatNameReadably(operation.getName()));
       resource.setUrl(request.getUri() != null ? request.getUri().toString() : null);
       resource.setMethod(request.getMethod() != null ? request.getMethod().toString() : null);
       resource.setHeaders(headersCreator.create(request.getHeaders()));

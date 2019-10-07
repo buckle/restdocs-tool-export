@@ -2,8 +2,11 @@ package restdocs.tool.export;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.InOrder;
+import org.mockito.Mockito;
 import org.springframework.restdocs.RestDocumentationContext;
 import org.springframework.restdocs.operation.Operation;
+import restdocs.tool.export.common.ExportProperties;
 import restdocs.tool.export.common.handler.ToolHandler;
 import restdocs.tool.export.common.handler.ToolHandlers;
 
@@ -15,6 +18,7 @@ import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
+import static restdocs.tool.export.common.ExportProperties.APPLICATION_NAME;
 
 public class ToolExportSnippetTest {
 
@@ -72,8 +76,10 @@ public class ToolExportSnippetTest {
 
     toolExportSnippet.document(operation);
 
-    verify(toolHandler, times(1)).initialize(outputDirectory, applicationName);
-    verify(toolHandler, times(1)).handleOperation(operation);
+    InOrder inOrder = Mockito.inOrder(operation, toolHandler, toolExportSnippet);
+    inOrder.verify(toolExportSnippet, times(1)).setAttributes(operation);
+    inOrder.verify(toolHandler, times(1)).initialize(outputDirectory, applicationName);
+    inOrder.verify(toolHandler, times(1)).handleOperation(operation);
   }
 
   @Test
@@ -87,5 +93,16 @@ public class ToolExportSnippetTest {
 
     verify(toolHandler, times(1)).initialize(outputDirectory, applicationName);
     verify(toolHandler, times(2)).handleOperation(operation);
+    verify(toolHandler, times(2)).handleOperation(operation);
+  }
+
+  @Test
+  void setAttributes() throws Exception {
+    ToolExportSnippet toolExportSnippet = spy(ToolExportSnippet.initInstance(applicationName, ToolHandlers.INSOMNIA));
+    assertNull(operation.getAttributes().get(APPLICATION_NAME));
+
+    toolExportSnippet.setAttributes(operation);
+
+    assertEquals(applicationName, operation.getAttributes().get(APPLICATION_NAME));
   }
 }

@@ -15,7 +15,7 @@ public class InfoCreator implements Creator<Info, String> {
       Info info = new Info();
 
       info.setPostmanId(UUID.randomUUID().toString());
-      info.setName(ExportUtils.formatName(appName));
+      info.setName(ExportUtils.formatNameReadably(appName));
       info.setSchema(PostmanConstants.SCHEMA_V2_1_0);
 
       return info;

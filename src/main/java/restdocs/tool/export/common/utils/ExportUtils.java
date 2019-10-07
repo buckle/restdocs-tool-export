@@ -6,9 +6,10 @@ public class ExportUtils {
 
   private ExportUtils() {}
 
-  public static String formatName(String name) {
+  public static String formatNameReadably(String name) {
     if(name != null) {
-      return WordUtils.capitalize(name.replaceAll("[^a-zA-Z0-9]", " ")
+      return WordUtils.capitalize(name.trim()
+                                      .replaceAll("[^a-zA-Z0-9]", " ")
                                       .replaceAll(" +", " "));
     }
 

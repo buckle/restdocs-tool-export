@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static restdocs.tool.export.common.assertion.AssertionUtils.assertName;
+import static restdocs.tool.export.common.assertion.AssertionUtils.assertNameReadably;
 
 public class ItemCreatorTest {
 
@@ -32,7 +32,7 @@ public class ItemCreatorTest {
     Item item = new ItemCreator(requestCreator).create(operation);
 
     assertNotNull(item);
-    assertName(item.getName(), "basename");
+    assertNameReadably(item.getName(), "basename");
     assertEquals(request, item.getRequest());
   }
 
