@@ -13,17 +13,24 @@ import static restdocs.tool.export.insomnia.exporter.utils.InsomniaExportUtils.g
 
 public class RequestResourceCreator implements Creator<Resource, Operation> {
 
+  private UrlCreator urlCreator;
   private HeadersCreator headersCreator;
   private ParametersCreator parametersCreator;
   private BodyCreator bodyCreator;
 
-  public RequestResourceCreator(HeadersCreator headersCreator, ParametersCreator parametersCreator, BodyCreator bodyCreator) {
+  public RequestResourceCreator(UrlCreator urlCreator,
+                                HeadersCreator headersCreator,
+                                ParametersCreator parametersCreator,
+                                BodyCreator bodyCreator) {
+
+    this.urlCreator = urlCreator;
     this.headersCreator = headersCreator;
     this.parametersCreator = parametersCreator;
     this.bodyCreator = bodyCreator;
   }
 
   public RequestResourceCreator() {
+    this.urlCreator = new UrlCreator();
     this.headersCreator = new HeadersCreator();
     this.parametersCreator = new ParametersCreator();
     this.bodyCreator = new BodyCreator();
@@ -39,7 +46,7 @@ public class RequestResourceCreator implements Creator<Resource, Operation> {
       resource.setId(generateId(REQUEST_ID));
       resource.setType(REQUEST_TYPE);
       resource.setName(formatNameReadably(operation.getName()));
-      resource.setUrl(request.getUri() != null ? request.getUri().toString() : null);
+      resource.setUrl(urlCreator.create(operation));
       resource.setMethod(request.getMethod() != null ? request.getMethod().toString() : null);
       resource.setHeaders(headersCreator.create(request.getHeaders()));
       resource.setParameters(parametersCreator.create(request.getParameters()));

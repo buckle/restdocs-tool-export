@@ -13,13 +13,10 @@ import restdocs.tool.export.insomnia.exporter.Pair;
 import restdocs.tool.export.insomnia.exporter.PairBuilder;
 import restdocs.tool.export.insomnia.exporter.Resource;
 
-import java.net.URI;
 import java.util.Set;
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static restdocs.tool.export.common.assertion.AssertionUtils.assertNameReadably;
@@ -30,6 +27,7 @@ import static restdocs.tool.export.insomnia.utils.InsomniaAssertionUtils.assertT
 
 public class RequestResourceCreatorTest {
 
+  private UrlCreator urlCreator;
   private HeadersCreator headersCreator;
   private ParametersCreator parametersCreator;
   private BodyCreator bodyCreator;
@@ -38,6 +36,7 @@ public class RequestResourceCreatorTest {
 
   @BeforeEach
   void setUp() {
+    urlCreator = mock(UrlCreator.class);
     headersCreator = mock(HeadersCreator.class);
     parametersCreator = mock(ParametersCreator.class);
     bodyCreator = mock(BodyCreator.class);
@@ -47,13 +46,13 @@ public class RequestResourceCreatorTest {
   }
 
   @Test
-  void create() throws Exception {
+  void create() {
     String baseName = "bobbert";
     String name = baseName + UUID.randomUUID();
     when(operation.getName()).thenReturn(name);
 
-    URI uri = new URI("/a/url");
-    when(request.getUri()).thenReturn(uri);
+    String url = "url" + UUID.randomUUID().toString();
+    when(urlCreator.create(operation)).thenReturn(url);
 
     when(request.getMethod()).thenReturn(HttpMethod.GET);
 
@@ -70,14 +69,15 @@ public class RequestResourceCreatorTest {
     Body body = mock(Body.class);
     when(bodyCreator.create(request)).thenReturn(body);
 
-    Resource resource = new RequestResourceCreator(headersCreator, parametersCreator, bodyCreator).create(operation);
+    Resource resource = new RequestResourceCreator(urlCreator, headersCreator, parametersCreator, bodyCreator)
+        .create(operation);
 
     assertNotNull(resource);
     assertIdMatches(REQUEST_ID, resource.getId());
     assertEquals(REQUEST_TYPE, resource.getType());
     assertNameReadably(resource.getName(), baseName);
     assertEquals(HttpMethod.GET.toString(), resource.getMethod());
-    assertEquals(uri.toString(), resource.getUrl());
+    assertEquals(url, resource.getUrl());
     assertEquals(headers, resource.getHeaders());
     assertEquals(parameterPairs, resource.getParameters());
     assertEquals(body, resource.getBody());
@@ -87,7 +87,8 @@ public class RequestResourceCreatorTest {
 
   @Test
   void createWhenOperationNull() {
-    Resource resource = new RequestResourceCreator(headersCreator, parametersCreator, bodyCreator).create(null);
+    Resource resource = new RequestResourceCreator(urlCreator, headersCreator, parametersCreator, bodyCreator)
+        .create(null);
 
     assertNull(resource);
   }
@@ -96,7 +97,8 @@ public class RequestResourceCreatorTest {
   void createWhenRequestNull() {
     when(operation.getRequest()).thenReturn(null);
 
-    Resource resource = new RequestResourceCreator(headersCreator, parametersCreator, bodyCreator).create(operation);
+    Resource resource = new RequestResourceCreator(urlCreator, headersCreator, parametersCreator, bodyCreator)
+        .create(operation);
 
     assertNull(resource);
   }
@@ -105,7 +107,8 @@ public class RequestResourceCreatorTest {
   void createWhenRequestUriNull() {
     when(request.getUri()).thenReturn(null);
 
-    Resource resource = new RequestResourceCreator(headersCreator, parametersCreator, bodyCreator).create(operation);
+    Resource resource = new RequestResourceCreator(urlCreator, headersCreator, parametersCreator, bodyCreator)
+        .create(operation);
 
     assertNotNull(resource);
     assertNull(resource.getUrl());
@@ -115,7 +118,8 @@ public class RequestResourceCreatorTest {
   void createWhenHttpMethodNull() {
     when(request.getMethod()).thenReturn(null);
 
-    Resource resource = new RequestResourceCreator(headersCreator, parametersCreator, bodyCreator).create(operation);
+    Resource resource = new RequestResourceCreator(urlCreator, headersCreator, parametersCreator, bodyCreator)
+        .create(operation);
 
     assertNotNull(resource);
     assertNull(resource.getMethod());

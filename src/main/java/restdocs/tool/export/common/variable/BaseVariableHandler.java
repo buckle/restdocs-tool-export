@@ -2,18 +2,20 @@ package restdocs.tool.export.common.variable;
 
 import restdocs.tool.export.common.utils.ExportUtils;
 
-public class VariableUtils {
+public class BaseVariableHandler implements VariableHandler {
 
-  public static String getHostVariable(String applicationName) {
+  @Override
+  public String getHostVariable(String applicationName) {
     String nameVariable = formatNameVariable(applicationName);
     if(nameVariable != null) {
-      return nameVariable + VariableKeys.HOST;
+      return encapsulateVariable(nameVariable + VariableKeys.HOST);
     }
 
     return null;
   }
 
-  public static String formatNameVariable(String name) {
+  @Override
+  public String formatNameVariable(String name) {
     String readably = ExportUtils.formatNameReadably(name);
 
     if(readably != null) {
@@ -21,5 +23,10 @@ public class VariableUtils {
     }
 
     return null;
+  }
+
+  @Override
+  public String encapsulateVariable(String variable) {
+    return variable;
   }
 }
