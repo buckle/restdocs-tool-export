@@ -38,7 +38,6 @@ public class BodyCreator implements Creator<Body, OperationRequest> {
       } else {
         body.setText(request.getContentAsString());
       }
-      body.setText(request.getContentAsString());
       body.setMimeType(contentType != null ? contentType.toString() : null);
 
       return body;

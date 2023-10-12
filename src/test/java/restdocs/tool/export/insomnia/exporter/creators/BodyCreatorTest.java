@@ -7,6 +7,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.operation.OperationRequest;
 import restdocs.tool.export.insomnia.exporter.Body;
+import restdocs.tool.export.insomnia.exporter.Pair;
 
 import java.util.UUID;
 
@@ -73,5 +74,46 @@ public class BodyCreatorTest {
     assertNotNull(body);
     assertEquals(contentBody, body.getText());
     assertNull(body.getMimeType());
+  }
+
+  @Test
+  void createWhenWhenContentTypeIsFormUrlEncoded() {
+    String formValue = UUID.randomUUID().toString();
+    String contentBody = "form1=" + formValue;
+
+    OperationRequest operationRequest = mock(OperationRequest.class);
+    when(operationRequest.getContentAsString()).thenReturn(contentBody);
+
+    HttpHeaders headers = new HttpHeaders();
+    headers.setAllow(Sets.newSet(HttpMethod.GET));
+    headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+    when(operationRequest.getHeaders()).thenReturn(headers);
+
+    Body body = new BodyCreator().create(operationRequest);
+
+    assertNotNull(body);
+    assertEquals(1, body.getParams().size());
+    Pair firstParam = body.getParams().iterator().next();
+    assertEquals("form1", firstParam.getName());
+    assertEquals(formValue, firstParam.getValue());
+    assertEquals(MediaType.APPLICATION_FORM_URLENCODED_VALUE, body.getMimeType());
+  }
+
+  @Test
+  void createWhenContentTypeIsFormUrlEncodedButNoFormParameters() {
+    OperationRequest operationRequest = mock(OperationRequest.class);
+    when(operationRequest.getContentAsString()).thenReturn(null);
+
+    HttpHeaders headers = new HttpHeaders();
+    headers.setAllow(Sets.newSet(HttpMethod.GET));
+    headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+    when(operationRequest.getHeaders()).thenReturn(headers);
+
+    Body body = new BodyCreator().create(operationRequest);
+
+    assertNotNull(body);
+    assertNull(body.getText());
+    assertNull(body.getParams());
+    assertEquals(MediaType.APPLICATION_FORM_URLENCODED_VALUE, body.getMimeType());
   }
 }
