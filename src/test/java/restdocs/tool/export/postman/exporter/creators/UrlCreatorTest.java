@@ -1,21 +1,20 @@
 package restdocs.tool.export.postman.exporter.creators;
 
 import org.junit.jupiter.api.Test;
-import org.mockito.internal.util.collections.Sets;
 import org.springframework.restdocs.operation.OperationRequest;
-import org.springframework.restdocs.operation.Parameters;
+import org.springframework.restdocs.operation.QueryParameters;
 import restdocs.tool.export.postman.exporter.QueryParam;
-import restdocs.tool.export.postman.exporter.QueryParamBuilder;
 import restdocs.tool.export.postman.exporter.Url;
 
 import java.net.URI;
 import java.util.Iterator;
-import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 public class UrlCreatorTest {
@@ -24,16 +23,12 @@ public class UrlCreatorTest {
   void create() throws Exception {
     String rawUrl = "https://localhost.somedomain.io:8080/path/stuff?param1=pval1";
     URI uri = new URI(rawUrl);
-    Parameters parameters = mock(Parameters.class);
 
     OperationRequest request = mock(OperationRequest.class);
     when(request.getUri()).thenReturn(uri);
-    when(request.getParameters()).thenReturn(parameters);
 
-    Set<QueryParam> queryParams = Sets.newSet(QueryParamBuilder.builder().build());
-    QueryParametersCreator queryParametersCreator = mock(QueryParametersCreator.class);
-    when(queryParametersCreator.create(parameters)).thenReturn(queryParams);
-
+    // PostmanQueryParameterCreate retrieves the query params directly from the uri
+    PostmanQueryParametersCreator queryParametersCreator = spy(new PostmanQueryParametersCreator());
     Url url = new UrlCreator(queryParametersCreator).create(request);
 
     assertNotNull(url);
@@ -82,7 +77,11 @@ public class UrlCreatorTest {
     }
     assertEquals(2, pathAssert);
 
-    assertEquals(queryParams, url.getQueryParams());
+    assertEquals(1, url.getQuery().size());
+    QueryParam firstQueryParam = url.getQuery().iterator().next();
+    assertEquals("param1", firstQueryParam.getKey());
+    assertEquals("pval1", firstQueryParam.getValue());
+    verify(queryParametersCreator).create(QueryParameters.from(request));
   }
 
   @Test
@@ -92,33 +91,19 @@ public class UrlCreatorTest {
 
   @Test
   void createWhenNullRequestURI() {
-    Parameters parameters = mock(Parameters.class);
-
     OperationRequest request = mock(OperationRequest.class);
     when(request.getUri()).thenReturn(null);
-    when(request.getParameters()).thenReturn(parameters);
 
-    Set<QueryParam> queryParams = Sets.newSet();
-    QueryParametersCreator queryParametersCreator = mock(QueryParametersCreator.class);
-    when(queryParametersCreator.create(parameters)).thenReturn(queryParams);
-
-    Url url = new UrlCreator(queryParametersCreator).create(request);
-
+    Url url = new UrlCreator().create(request);
     assertNull(url);
   }
 
   @Test
-  void creatWhenEmptyRequestURI() throws Exception {
+  void createWhenEmptyRequestURI() throws Exception {
     URI uri = new URI("");
-    Parameters parameters = mock(Parameters.class);
 
     OperationRequest request = mock(OperationRequest.class);
     when(request.getUri()).thenReturn(uri);
-    when(request.getParameters()).thenReturn(parameters);
-
-    Set<QueryParam> queryParams = Sets.newSet();
-    QueryParametersCreator queryParametersCreator = mock(QueryParametersCreator.class);
-    when(queryParametersCreator.create(parameters)).thenReturn(queryParams);
 
     Url url = new UrlCreator().create(request);
 
@@ -128,22 +113,21 @@ public class UrlCreatorTest {
     assertNull(url.getHost());
     assertNull(url.getPort());
     assertNull(url.getPath());
-    assertEquals(queryParams, url.getQueryParams());
+    assertNull(url.getQuery());
   }
 
   @Test
-  void createWhenNullRequestParameters() throws Exception {
-    String rawUrl = "https://localhost.somedomain.io:8080/path/stuff?param1=pval1";
+  void createWhenNoRequestParameters() throws Exception {
+    String rawUrl = "https://localhost.somedomain.io:8080/path/stuff";
     URI uri = new URI(rawUrl);
 
     OperationRequest request = mock(OperationRequest.class);
     when(request.getUri()).thenReturn(uri);
-    when(request.getParameters()).thenReturn(null);
 
     Url url = new UrlCreator().create(request);
 
     assertNotNull(url);
     assertNotNull(url.getRaw());
-    assertNull(url.getQueryParams());
+    assertNull(url.getQuery());
   }
 }

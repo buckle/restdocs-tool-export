@@ -7,7 +7,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.restdocs.operation.Operation;
 import org.springframework.restdocs.operation.OperationRequest;
-import org.springframework.restdocs.operation.Parameters;
 import restdocs.tool.export.insomnia.exporter.Body;
 import restdocs.tool.export.insomnia.exporter.Pair;
 import restdocs.tool.export.insomnia.exporter.PairBuilder;
@@ -20,6 +19,7 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static restdocs.tool.export.common.assertion.AssertionUtils.assertName;
@@ -31,7 +31,7 @@ import static restdocs.tool.export.insomnia.utils.InsomniaAssertionUtils.assertT
 public class RequestResourceCreatorTest {
 
   private HeadersCreator headersCreator;
-  private ParametersCreator parametersCreator;
+  private InsomniaQueryParametersCreator insomniaQueryParametersCreator;
   private BodyCreator bodyCreator;
   private Operation operation;
   private OperationRequest request;
@@ -39,7 +39,7 @@ public class RequestResourceCreatorTest {
   @BeforeEach
   void setUp() {
     headersCreator = mock(HeadersCreator.class);
-    parametersCreator = mock(ParametersCreator.class);
+    insomniaQueryParametersCreator = mock(InsomniaQueryParametersCreator.class);
     bodyCreator = mock(BodyCreator.class);
     operation = mock(Operation.class);
     request = mock(OperationRequest.class);
@@ -62,15 +62,13 @@ public class RequestResourceCreatorTest {
     Set<Pair> headers = Sets.newSet(PairBuilder.builder().build());
     when(headersCreator.create(httpHeaders)).thenReturn(headers);
 
-    Parameters parameters = mock(Parameters.class);
-    when(request.getParameters()).thenReturn(parameters);
     Set<Pair> parameterPairs = Sets.newSet(PairBuilder.builder().build());
-    when(parametersCreator.create(parameters)).thenReturn(parameterPairs);
+    when(insomniaQueryParametersCreator.create(any())).thenReturn(parameterPairs);
 
     Body body = mock(Body.class);
     when(bodyCreator.create(request)).thenReturn(body);
 
-    Resource resource = new RequestResourceCreator(headersCreator, parametersCreator, bodyCreator).create(operation);
+    Resource resource = new RequestResourceCreator(headersCreator, insomniaQueryParametersCreator, bodyCreator).create(operation);
 
     assertNotNull(resource);
     assertIdMatches(REQUEST_ID, resource.getId());
@@ -87,7 +85,7 @@ public class RequestResourceCreatorTest {
 
   @Test
   void createWhenOperationNull() {
-    Resource resource = new RequestResourceCreator(headersCreator, parametersCreator, bodyCreator).create(null);
+    Resource resource = new RequestResourceCreator(headersCreator, insomniaQueryParametersCreator, bodyCreator).create(null);
 
     assertNull(resource);
   }
@@ -96,7 +94,7 @@ public class RequestResourceCreatorTest {
   void createWhenRequestNull() {
     when(operation.getRequest()).thenReturn(null);
 
-    Resource resource = new RequestResourceCreator(headersCreator, parametersCreator, bodyCreator).create(operation);
+    Resource resource = new RequestResourceCreator(headersCreator, insomniaQueryParametersCreator, bodyCreator).create(operation);
 
     assertNull(resource);
   }
@@ -105,7 +103,7 @@ public class RequestResourceCreatorTest {
   void createWhenRequestUriNull() {
     when(request.getUri()).thenReturn(null);
 
-    Resource resource = new RequestResourceCreator(headersCreator, parametersCreator, bodyCreator).create(operation);
+    Resource resource = new RequestResourceCreator(headersCreator, insomniaQueryParametersCreator, bodyCreator).create(operation);
 
     assertNotNull(resource);
     assertNull(resource.getUrl());
@@ -115,7 +113,7 @@ public class RequestResourceCreatorTest {
   void createWhenHttpMethodNull() {
     when(request.getMethod()).thenReturn(null);
 
-    Resource resource = new RequestResourceCreator(headersCreator, parametersCreator, bodyCreator).create(operation);
+    Resource resource = new RequestResourceCreator(headersCreator, insomniaQueryParametersCreator, bodyCreator).create(operation);
 
     assertNotNull(resource);
     assertNull(resource.getMethod());

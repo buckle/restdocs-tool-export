@@ -13,7 +13,7 @@ public class Url {
   private List<String> host;
   private Integer port;
   private List<String> path;
-  private Set<QueryParam> queryParams;
+  private Set<QueryParam> query;
 
   public String getRaw() {
     return raw;
@@ -55,11 +55,11 @@ public class Url {
     this.path = path;
   }
 
-  public Set<QueryParam> getQueryParams() {
-    return queryParams;
+  public Set<QueryParam> getQuery() {
+    return query;
   }
 
-  public void setQueryParams(Set<QueryParam> queryParams) {
-    this.queryParams = queryParams;
+  public void setQuery(Set<QueryParam> query) {
+    this.query = query;
   }
 }

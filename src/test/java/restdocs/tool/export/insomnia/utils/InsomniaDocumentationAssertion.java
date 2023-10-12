@@ -3,6 +3,7 @@ package restdocs.tool.export.insomnia.utils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.apache.commons.io.FileUtils;
+import org.springframework.util.MultiValueMap;
 import restdocs.tool.export.AssertionData;
 import restdocs.tool.export.application.PostData;
 import restdocs.tool.export.insomnia.exporter.Export;
@@ -35,21 +36,38 @@ public class InsomniaDocumentationAssertion {
     }
   }
 
-  private static void assertExportData(AssertionData assertionData) throws IOException {
+  public static void assertInsomniaResourcesIncluded(String... resourceNameArray) throws IOException {
 
+    for(String assertionData : resourceNameArray) {
+      assertExportDataResourceExists(assertionData);
+      assertDocDataResourceExists(assertionData);
+    }
+  }
+
+  private static Resource assertExportDataResourceExists(String resourceName) throws IOException {
     File exportFile = new File(BASE_DOC_PATH + "/insomnia-download/insomnia.export");
     Export export = objectMapper.readValue(exportFile, Export.class);
     assertNotNull(export);
 
-    Resource postTestResource = findResourceForName(export, assertionData.getResourceName());
-    assertBody(postTestResource, assertionData.getPostData());
+    return findResourceForName(export, resourceName);
+  }
+
+  private static void assertExportData(AssertionData assertionData) throws IOException {
+    Resource postTestResource = assertExportDataResourceExists(assertionData.getResourceName());
+    if (assertionData.getPostData() != null) {
+      assertBody(postTestResource, assertionData.getPostData());
+    }
     assertPathVariable(postTestResource, assertionData.getPathVariable());
-    assertParameter(postTestResource, assertionData.getParameter());
+    if (assertionData.getQueryParameter() != null) {
+      assertParameter(postTestResource, assertionData.getQueryParameter());
+    }
+    if (assertionData.getFormParameter() != null) {
+      assertFormParameter(postTestResource, assertionData.getFormParameter());
+    }
     assertHeader(postTestResource, assertionData.getHeader());
   }
 
-  private static void assertDocData(AssertionData assertionData) throws IOException {
-
+  private static Resource assertDocDataResourceExists(String resourceName) throws IOException {
     File docFile = new File(BASE_DOC_PATH + "/insomnia-download/insomnia.adoc");
     String sAdoc = FileUtils.readFileToString(docFile, Charset.defaultCharset());
     sAdoc = sAdoc.replace("link:++data:application/json;base64,", ""); // So elegant
@@ -58,11 +76,21 @@ public class InsomniaDocumentationAssertion {
     byte[] decode = Base64.getDecoder().decode(sAdoc);
     Export export = objectMapper.readValue(decode, Export.class);
     assertNotNull(export);
+    return findResourceForName(export, resourceName);
+  }
 
-    Resource postTestResource = findResourceForName(export, assertionData.getResourceName());
-    assertBody(postTestResource, assertionData.getPostData());
+  private static void assertDocData(AssertionData assertionData) throws IOException {
+    Resource postTestResource = assertDocDataResourceExists(assertionData.getResourceName());
+    if (assertionData.getPostData() != null) {
+      assertBody(postTestResource, assertionData.getPostData());
+    }
     assertPathVariable(postTestResource, assertionData.getPathVariable());
-    assertParameter(postTestResource, assertionData.getParameter());
+    if (assertionData.getQueryParameter() != null) {
+      assertParameter(postTestResource, assertionData.getQueryParameter());
+    }
+    if (assertionData.getFormParameter() != null) {
+      assertFormParameter(postTestResource, assertionData.getFormParameter());
+    }
     assertHeader(postTestResource, assertionData.getHeader());
   }
 
@@ -87,6 +115,19 @@ public class InsomniaDocumentationAssertion {
                                                    .findFirst()
                                                    .orElse(null);
     assertNotNull(documentedParameter);
+  }
+
+  private static void assertFormParameter(Resource testResource, MultiValueMap<String, String> parameter) {
+    Set<Pair> documentedParameters = testResource.getBody().getParams();
+    assertNotNull(documentedParameters);
+    parameter.forEach((k, v) -> {
+      Pair documentedParameter = documentedParameters.stream()
+                                                     .filter(pair -> pair.getName().equals(k))
+                                                     .filter(pair -> pair.getValue().equals(v.get(0)))
+                                                     .findFirst()
+                                                     .orElse(null);
+      assertNotNull(documentedParameter);
+    });
   }
 
   private static void assertHeader(Resource testResource, String header) {

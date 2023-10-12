@@ -2,6 +2,8 @@ package restdocs.tool.export.application;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -26,5 +28,10 @@ public class TestApplication {
     response.put("pathVariable", pathVariable);
     response.put("requestParam", param1);
     return response;
+  }
+
+  @PostMapping("/post/form/{pathVariable}")
+  public ResponseEntity greetingSubmit(@ModelAttribute FormData formData, @PathVariable String pathVariable) {
+    return ResponseEntity.ok().build();
   }
 }

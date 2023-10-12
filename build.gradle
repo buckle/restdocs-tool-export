@@ -1,5 +1,5 @@
 plugins {
-  id 'org.asciidoctor.convert' version '1.5.3'
+  id 'org.asciidoctor.jvm.convert' version '3.3.2'
   id 'java'
   id 'jacoco'
   id 'maven-publish'
@@ -7,8 +7,11 @@ plugins {
 }
 
 group = 'com.github.buckle'
-version = '0.0.3-SNAPSHOT'
-sourceCompatibility = '1.8'
+version = '0.0.4-RELEASE'
+
+java {
+  sourceCompatibility = JavaVersion.VERSION_17
+}
 
 repositories {
   mavenCentral()
@@ -18,30 +21,38 @@ ext {
   set('snippetsDir', file("build/generated-snippets"))
 }
 
-dependencies {
-  compile('org.springframework.restdocs:spring-restdocs-mockmvc:2.0.3.RELEASE')
-  compile('org.slf4j:slf4j-api:1.7.28')
-
-  implementation('org.apache.commons:commons-lang3:3.9')
-  implementation('commons-io:commons-io:2.6')
-  implementation('org.apache.commons:commons-text:1.7')
-  implementation('com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.9.9')
-
-  testImplementation('org.springframework.boot:spring-boot-starter-web:2.1.7.RELEASE')
-  testImplementation('org.springframework.boot:spring-boot-starter-test:2.1.7.RELEASE') {
-    exclude group: 'junit', module: 'junit'
+configurations.configureEach {
+  resolutionStrategy {
+    force 'org.yaml:snakeyaml:2.2'
+    force 'org.springframework:spring-webmvc:6.0.12'
+    force 'org.springframework:spring-expression:6.0.12'
   }
-  testImplementation('org.mockito:mockito-core:2.27.0')
-  testImplementation('org.mockito:mockito-junit-jupiter:2.27.0')
-  testImplementation('org.junit.jupiter:junit-jupiter:5.4.2')
 }
 
-task sourceJar(type: Jar) {
+dependencies {
+  implementation('org.springframework.restdocs:spring-restdocs-mockmvc:3.0.0')
+  implementation('org.slf4j:slf4j-api:2.0.9')
+
+  implementation('org.apache.commons:commons-lang3:3.13.0')
+  implementation('commons-io:commons-io:2.14.0')
+  implementation('org.apache.commons:commons-text:1.10.0')
+  implementation('com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.15.2')
+
+  testImplementation('org.springframework.boot:spring-boot-starter-web:3.1.4')
+  testImplementation('org.springframework.boot:spring-boot-starter-test:3.1.4') {
+    exclude group: 'junit', module: 'junit'
+  }
+  testImplementation('org.mockito:mockito-core:5.5.0')
+  testImplementation('org.mockito:mockito-junit-jupiter:5.5.0')
+  testImplementation('org.junit.jupiter:junit-jupiter:5.10.0')
+}
+
+tasks.register('sourceJar', Jar) {
   from sourceSets.main.allJava
   archiveClassifier = 'sources'
 }
 
-task javadocJar(type: Jar) {
+tasks.register('javadocJar', Jar) {
   from javadoc
   archiveClassifier = 'javadoc'
 }
