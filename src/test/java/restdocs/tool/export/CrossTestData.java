@@ -8,7 +8,8 @@ import java.util.UUID;
 public class CrossTestData {
 
   public static final String pathVariable = UUID.randomUUID().toString();
-  public static final String parameter = UUID.randomUUID().toString();
+  public static final String queryParam = UUID.randomUUID().toString();
+
   public static final String headerXKey = UUID.randomUUID().toString();
   public static final PostData postData = new PostData();
 

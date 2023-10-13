@@ -1,8 +1,9 @@
 package restdocs.tool.export.insomnia.exporter.creators;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.restdocs.operation.Parameters;
-import org.springframework.restdocs.operation.QueryStringParser;
+import org.springframework.http.HttpMethod;
+import org.springframework.restdocs.operation.OperationRequestFactory;
+import org.springframework.restdocs.operation.QueryParameters;
 import restdocs.tool.export.insomnia.exporter.Pair;
 
 import java.net.URI;
@@ -13,13 +14,12 @@ import static restdocs.tool.export.insomnia.utils.InsomniaAssertionUtils.assertI
 import static restdocs.tool.export.insomnia.exporter.InsomniaConstants.PAIR_ID;
 import static restdocs.tool.export.insomnia.exporter.utils.PairUtils.findPairByNameValue;
 
-public class ParametersCreatorTest {
+public class PostmanInsomniaQueryParametersCreatorTest {
 
   @Test
   void create() throws Exception {
-    Parameters parameters = new QueryStringParser().parse(new URI("/?param1=prize1&param2=prize2&param1=surprise"));
-
-    Set<Pair> parameterPairs = new ParametersCreator().create(parameters);
+    QueryParameters parameters = QueryParameters.from(new OperationRequestFactory().create(new URI("/?param1=prize1&param2=prize2&param1=surprise"), HttpMethod.GET, null, null, null));
+    Set<Pair> parameterPairs = new InsomniaQueryParametersCreator().create(parameters);
 
     assertNotNull(parameterPairs);
     assertEquals(3, parameterPairs.size());
@@ -36,9 +36,8 @@ public class ParametersCreatorTest {
 
   @Test
   void createWhenDuplicateParamValue() throws Exception {
-    Parameters parameters = new QueryStringParser().parse(new URI("/?param1=prize1&param1=prize1"));
-
-    Set<Pair> parameterPairs = new ParametersCreator().create(parameters);
+    QueryParameters parameters = QueryParameters.from(new OperationRequestFactory().create(new URI("/?param1=prize1&param1=prize1"), HttpMethod.GET, null, null, null));
+    Set<Pair> parameterPairs = new InsomniaQueryParametersCreator().create(parameters);
 
     assertNotNull(parameterPairs);
     assertEquals(1, parameterPairs.size());
@@ -49,11 +48,13 @@ public class ParametersCreatorTest {
 
   @Test
   void createWhenNullParameters() {
-    assertNull(new ParametersCreator().create(null));
+    assertNull(new InsomniaQueryParametersCreator().create(null));
   }
 
   @Test
-  void createWhenEmptyParameters() {
-    assertNull(new ParametersCreator().create(new Parameters()));
+  void createWhenEmptyParameters() throws Exception {
+    QueryParameters parameters = QueryParameters.from(new OperationRequestFactory().create(new URI("/test"), HttpMethod.GET, null, null, null));
+    assertTrue(parameters.isEmpty());
+    assertNull(new InsomniaQueryParametersCreator().create(parameters));
   }
 }

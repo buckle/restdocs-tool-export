@@ -1,6 +1,6 @@
 package restdocs.tool.export.insomnia.exporter.creators;
 
-import org.springframework.restdocs.operation.Parameters;
+import org.springframework.restdocs.operation.QueryParameters;
 import restdocs.tool.export.common.creator.Creator;
 import restdocs.tool.export.insomnia.exporter.Pair;
 
@@ -11,10 +11,10 @@ import static restdocs.tool.export.insomnia.exporter.InsomniaConstants.PAIR_ID;
 import static restdocs.tool.export.insomnia.exporter.utils.InsomniaExportUtils.generateId;
 import static restdocs.tool.export.insomnia.exporter.utils.PairUtils.findPairByNameValue;
 
-public class ParametersCreator implements Creator<Set<Pair>, Parameters> {
+public class InsomniaQueryParametersCreator implements Creator<Set<Pair>, QueryParameters> {
 
   @Override
-  public Set<Pair> create(Parameters parameters) {
+  public Set<Pair> create(QueryParameters parameters) {
     if(parameters != null && !parameters.isEmpty()) {
       Set<Pair> parameterPairs = new HashSet<>();
 

@@ -1,6 +1,7 @@
 package restdocs.tool.export.postman.exporter.creators;
 
 import org.springframework.restdocs.operation.OperationRequest;
+import org.springframework.restdocs.operation.QueryParameters;
 import restdocs.tool.export.common.creator.Creator;
 import restdocs.tool.export.postman.exporter.Url;
 
@@ -11,14 +12,14 @@ import java.util.stream.Collectors;
 
 public class UrlCreator implements Creator<Url, OperationRequest> {
 
-  private QueryParametersCreator queryParametersCreator;
+  private PostmanQueryParametersCreator postmanQueryParametersCreator;
 
-  public UrlCreator(QueryParametersCreator queryParametersCreator) {
-    this.queryParametersCreator = queryParametersCreator;
+  public UrlCreator(PostmanQueryParametersCreator postmanQueryParametersCreator) {
+    this.postmanQueryParametersCreator = postmanQueryParametersCreator;
   }
 
   public UrlCreator() {
-    this.queryParametersCreator = new QueryParametersCreator();
+    this.postmanQueryParametersCreator = new PostmanQueryParametersCreator();
   }
 
   @Override
@@ -49,7 +50,7 @@ public class UrlCreator implements Creator<Url, OperationRequest> {
         url.setPath(pathSplit);
       }
 
-      url.setQueryParams(queryParametersCreator.create(request.getParameters()));
+      url.setQuery(postmanQueryParametersCreator.create(QueryParameters.from(request)));
 
       return url;
     }

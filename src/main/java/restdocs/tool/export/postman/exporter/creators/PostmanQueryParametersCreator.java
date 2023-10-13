@@ -1,6 +1,6 @@
 package restdocs.tool.export.postman.exporter.creators;
 
-import org.springframework.restdocs.operation.Parameters;
+import org.springframework.restdocs.operation.QueryParameters;
 import restdocs.tool.export.common.creator.Creator;
 import restdocs.tool.export.postman.exporter.QueryParam;
 
@@ -9,10 +9,10 @@ import java.util.Set;
 
 import static restdocs.tool.export.postman.exporter.utils.QueryParamUtils.findQueryParamByKeyValue;
 
-public class QueryParametersCreator implements Creator<Set<QueryParam>, Parameters> {
+public class PostmanQueryParametersCreator implements Creator<Set<QueryParam>, QueryParameters> {
 
   @Override
-  public Set<QueryParam> create(Parameters parameters) {
+  public Set<QueryParam> create(QueryParameters parameters) {
     if(parameters != null && !parameters.isEmpty()) {
       Set<QueryParam> queryParams = new HashSet<>();
 
