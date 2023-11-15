@@ -1,3 +1,7 @@
+0.0.4-RELEASE
+===========================================
+- Compatible with webflux or webmvc
+
 0.0.3-RELEASE
 ===========================================
 - Upgraded to spring boot 3

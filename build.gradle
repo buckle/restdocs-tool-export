@@ -7,7 +7,7 @@ plugins {
 }
 
 group = 'com.github.buckle'
-version = '0.0.3-RELEASE'
+version = '0.0.4-RELEASE'
 
 java {
   sourceCompatibility = JavaVersion.VERSION_17
@@ -22,14 +22,8 @@ ext {
 }
 
 dependencies {
-  implementation('org.springframework:spring-webmvc:6.0.12') {
-    because 'version 6.0.0 pulled in by spring-restdocs-mockmvc:3.0.0 affected by vulnerability'
-  }
-  implementation('org.springframework:spring-expression:6.0.12') {
-    because 'version 6.0.0 pulled in by spring-restdocs-mockmvc:3.0.0 affected by vulnerability'
-  }
-
-  implementation('org.springframework.restdocs:spring-restdocs-mockmvc:3.0.0')
+  implementation('org.springframework.restdocs:spring-restdocs-core:3.0.0')
+  implementation('org.springframework:spring-web:6.0.12')
   implementation('org.slf4j:slf4j-api:2.0.9')
 
   implementation('org.apache.commons:commons-lang3:3.13.0')
@@ -37,13 +31,16 @@ dependencies {
   implementation('org.apache.commons:commons-text:1.10.0')
   implementation('com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.15.2')
 
+  testImplementation('org.springframework.restdocs:spring-restdocs-mockmvc:3.0.0')
+  testImplementation('org.springframework:spring-webmvc:6.0.12') {
+    because 'version 6.0.0 pulled in by spring-restdocs-mockmvc:3.0.0 affected by vulnerability'
+  }
+
+  testImplementation('org.springframework.boot:spring-boot-starter-test:3.1.4')
   testImplementation('org.yaml:snakeyaml:2.2') {
-    because 'version 1.33 pulled in by spring-boot-starter-web:3.1.4 affected by vulnerability'
+    because 'version 1.33 pulled in by spring-boot-starter-test:3.1.4 affected by vulnerability'
   }
-  testImplementation('org.springframework.boot:spring-boot-starter-web:3.1.4')
-  testImplementation('org.springframework.boot:spring-boot-starter-test:3.1.4') {
-    exclude group: 'junit', module: 'junit'
-  }
+
   testImplementation('org.mockito:mockito-core:5.5.0')
   testImplementation('org.mockito:mockito-junit-jupiter:5.5.0')
   testImplementation('org.junit.jupiter:junit-jupiter:5.10.0')
