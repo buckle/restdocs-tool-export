@@ -77,7 +77,7 @@ public class InsomniaExporter extends JSONAbstractFileToolExporter {
   }
 
   protected void updateEnvironmentResourceVariables(Operation operation) {
-    if (operation.getAttributes() != null) {
+    if (operation != null && operation.getAttributes() != null) {
       Set<String> variables = (Set<String>) operation.getAttributes().get(ExportConstants.VARIABLES);
       if (variables != null && !variables.isEmpty()) {
         Map<String, String> variablesAsData = variables.stream().collect(Collectors.toMap(s -> s, s -> ""));

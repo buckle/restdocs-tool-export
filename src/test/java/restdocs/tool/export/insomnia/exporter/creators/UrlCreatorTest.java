@@ -99,6 +99,29 @@ public class UrlCreatorTest {
   }
 
   @Test
+  public void createWhenHostVariableEnabledNull() throws Exception {
+    InsomniaVariableHandler insomniaVariableHandler1 = new InsomniaVariableHandler();
+    UrlCreator urlCreator1 = new UrlCreator(insomniaVariableHandler1);
+
+    OperationRequest operationRequest = mock(OperationRequest.class);
+    URI uri = new URI("https", "localhost", "/a/url/<<variable-path>>", "q=test", null);
+    when(operationRequest.getUri()).thenReturn(uri);
+
+    Map<String, Object> attributes = new HashMap<>();
+    attributes.put(ExportConstants.APPLICATION_NAME, applicationName);
+    attributes.put(ExportConstants.HOST_VARIABLE_ENABLED, null);
+
+    Operation operation = mock(Operation.class);
+    when(operation.getRequest()).thenReturn(operationRequest);
+    when(operation.getAttributes()).thenReturn(attributes);
+
+    String url = urlCreator1.create(operation);
+
+    assertNotNull(url);
+    assertEquals("https://localhost/a/url/{{_.variable_path}}", url);
+  }
+
+  @Test
   public void createWhenHostVariableEnabledFalse() throws Exception {
     InsomniaVariableHandler insomniaVariableHandler1 = new InsomniaVariableHandler();
     UrlCreator urlCreator1 = new UrlCreator(insomniaVariableHandler1);

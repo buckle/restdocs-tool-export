@@ -61,7 +61,7 @@ public class RequestCreatorTest {
     Operation operation = mock(Operation.class);
     when(operation.getRequest()).thenReturn(null);
 
-    assertNull(new RequestCreator().create(null));
+    assertNull(new RequestCreator().create(operation));
   }
 
   @Test

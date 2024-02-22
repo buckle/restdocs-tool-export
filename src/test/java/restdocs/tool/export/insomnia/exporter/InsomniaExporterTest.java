@@ -4,7 +4,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.internal.util.collections.Sets;
 import org.springframework.restdocs.operation.Operation;
-import restdocs.tool.export.common.ExportConstants;
 import restdocs.tool.export.insomnia.exporter.creators.EnvironmentResourceCreator;
 import restdocs.tool.export.insomnia.exporter.creators.ExportCreator;
 import restdocs.tool.export.insomnia.exporter.creators.FolderResourceCreator;
@@ -13,6 +12,8 @@ import restdocs.tool.export.utils.TestFileUtils;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
@@ -20,6 +21,8 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
+import static restdocs.tool.export.common.ExportConstants.APPLICATION_NAME;
+import static restdocs.tool.export.common.ExportConstants.VARIABLES;
 import static restdocs.tool.export.insomnia.exporter.InsomniaConstants.*;
 import static restdocs.tool.export.insomnia.exporter.utils.InsomniaExportUtils.generateId;
 
@@ -83,7 +86,7 @@ public class InsomniaExporterTest {
   @Test
   void processOperation() throws Exception {
     Operation operation = mock(Operation.class);
-    when(operation.getAttributes()).thenReturn(Map.of(ExportConstants.VARIABLES, Set.of("testingVariable")));
+    when(operation.getAttributes()).thenReturn(Map.of(VARIABLES, Set.of("testingVariable")));
 
     Resource operationResource = new Resource();
     operationResource.setId(generateId(REQUEST_ID));
@@ -223,5 +226,55 @@ public class InsomniaExporterTest {
     assertNotNull(environmentResource);
     verify(environmentResourceCreator).create(appName);
     assertEquals(1, export.getResources().stream().filter(s -> s.getType().equals(ENVIRONMENT_TYPE)).count());
+  }
+
+  @Test
+  void updateEnvironmentResourceVariablesNullOperation() {
+    InsomniaExporter insomniaExporter = spy(new InsomniaExporter());
+    insomniaExporter.updateEnvironmentResourceVariables(null);
+    verify(insomniaExporter, never()).findOrCreateEnvironmentResource(anyString());
+  }
+  @Test
+  void updateEnvironmentResourceVariablesNullAttributes() {
+    Operation operation = mock(Operation.class);
+    when(operation.getAttributes()).thenReturn(null);
+
+    InsomniaExporter insomniaExporter = spy(new InsomniaExporter());
+    insomniaExporter.updateEnvironmentResourceVariables(operation);
+    verify(insomniaExporter, never()).findOrCreateEnvironmentResource(anyString());
+  }
+
+  @Test
+  void updateEnvironmentResourceVariablesNullVariablesAttribute() {
+    Operation operation = mock(Operation.class);
+    when(operation.getAttributes()).thenReturn(new HashMap<>());
+
+    InsomniaExporter insomniaExporter = spy(new InsomniaExporter());
+    insomniaExporter.updateEnvironmentResourceVariables(operation);
+    verify(insomniaExporter, never()).findOrCreateEnvironmentResource(anyString());
+  }
+
+  @Test
+  void updateEnvironmentResourceVariablesEmptyVariablesAttribute() {
+    Operation operation = mock(Operation.class);
+    when(operation.getAttributes()).thenReturn(Map.of(VARIABLES, new HashSet<>()));
+
+    InsomniaExporter insomniaExporter = spy(new InsomniaExporter());
+    insomniaExporter.updateEnvironmentResourceVariables(operation);
+    verify(insomniaExporter, never()).findOrCreateEnvironmentResource(anyString());
+  }
+
+  @Test
+  void updateEnvironmentResourceVariablesWhenHasVariables() {
+    Operation operation = mock(Operation.class);
+    String appName = "appName";
+    when(operation.getAttributes()).thenReturn(Map.of(VARIABLES, Set.of("testVariable"), APPLICATION_NAME, "appName"));
+
+    InsomniaExporter insomniaExporter = spy(new InsomniaExporter());
+    Resource resource = mock(Resource.class);
+    doReturn(resource).when(insomniaExporter).findOrCreateEnvironmentResource(anyString());
+    insomniaExporter.updateEnvironmentResourceVariables(operation);
+    verify(insomniaExporter).findOrCreateEnvironmentResource(appName);
+    verify(resource).setData(anyMap());
   }
 }

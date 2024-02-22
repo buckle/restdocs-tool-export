@@ -165,8 +165,15 @@ public class UrlCreatorTest {
   }
 
   @Test
-  void createWhenNullRequest() {
+  void createWhenNullOperation() {
     assertNull(new UrlCreator().create(null));
+  }
+
+  @Test
+  void createWhenNullOperationRequest() {
+    Operation operation = mock(Operation.class);
+    when(operation.getRequest()).thenReturn(null);
+    assertNull(new UrlCreator().create(operation));
   }
 
   @Test
