@@ -13,13 +13,13 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static restdocs.tool.export.common.assertion.AssertionUtils.assertName;
+import static restdocs.tool.export.common.assertion.AssertionUtils.assertNameReadably;
 
 public class ItemCreatorTest {
 
   @Test
   void create() {
-    String name = "basename-" + UUID.randomUUID().toString();
+    String name = "basename-" + UUID.randomUUID();
     OperationRequest operationRequest = mock(OperationRequest.class);
     Operation operation = mock(Operation.class);
     when(operation.getRequest()).thenReturn(operationRequest);
@@ -27,12 +27,12 @@ public class ItemCreatorTest {
 
     Request request = mock(Request.class);
     RequestCreator requestCreator = mock(RequestCreator.class);
-    when(requestCreator.create(operationRequest)).thenReturn(request);
+    when(requestCreator.create(operation)).thenReturn(request);
 
     Item item = new ItemCreator(requestCreator).create(operation);
 
     assertNotNull(item);
-    assertName(item.getName(), "basename");
+    assertNameReadably(item.getName(), "basename");
     assertEquals(request, item.getRequest());
   }
 
@@ -49,7 +49,7 @@ public class ItemCreatorTest {
 
     Request request = mock(Request.class);
     RequestCreator requestCreator = mock(RequestCreator.class);
-    when(requestCreator.create(operationRequest)).thenReturn(request);
+    when(requestCreator.create(operation)).thenReturn(request);
 
     Item item = new ItemCreator(requestCreator).create(operation);
 
@@ -58,7 +58,7 @@ public class ItemCreatorTest {
 
   @Test
   void createWhenOperationRequestNull() {
-    String name = "basename-" + UUID.randomUUID().toString();
+    String name = "basename-" + UUID.randomUUID();
     Operation operation = mock(Operation.class);
     when(operation.getName()).thenReturn(name);
 

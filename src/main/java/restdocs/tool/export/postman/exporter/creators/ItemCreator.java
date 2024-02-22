@@ -24,8 +24,8 @@ public class ItemCreator implements Creator<Item, Operation> {
        operation.getRequest() != null) {
 
       Item item = new Item();
-      item.setName(ExportUtils.formatName(operation.getName()));
-      item.setRequest(requestCreator.create(operation.getRequest()));
+      item.setName(ExportUtils.formatNameReadably(operation.getName()));
+      item.setRequest(requestCreator.create(operation));
       return item;
     }
 

@@ -22,7 +22,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static restdocs.tool.export.common.assertion.AssertionUtils.assertName;
+import static restdocs.tool.export.common.assertion.AssertionUtils.assertNameReadably;
 import static restdocs.tool.export.insomnia.exporter.InsomniaConstants.REQUEST_ID;
 import static restdocs.tool.export.insomnia.exporter.InsomniaConstants.REQUEST_TYPE;
 import static restdocs.tool.export.insomnia.utils.InsomniaAssertionUtils.assertIdMatches;
@@ -30,6 +30,7 @@ import static restdocs.tool.export.insomnia.utils.InsomniaAssertionUtils.assertT
 
 public class RequestResourceCreatorTest {
 
+  private UrlCreator urlCreator;
   private HeadersCreator headersCreator;
   private InsomniaQueryParametersCreator insomniaQueryParametersCreator;
   private BodyCreator bodyCreator;
@@ -38,6 +39,7 @@ public class RequestResourceCreatorTest {
 
   @BeforeEach
   void setUp() {
+    urlCreator = mock(UrlCreator.class);
     headersCreator = mock(HeadersCreator.class);
     insomniaQueryParametersCreator = mock(InsomniaQueryParametersCreator.class);
     bodyCreator = mock(BodyCreator.class);
@@ -54,6 +56,8 @@ public class RequestResourceCreatorTest {
 
     URI uri = new URI("/a/url");
     when(request.getUri()).thenReturn(uri);
+    String url = "url" + UUID.randomUUID();
+    when(urlCreator.create(operation)).thenReturn(url);
 
     when(request.getMethod()).thenReturn(HttpMethod.GET);
 
@@ -68,14 +72,14 @@ public class RequestResourceCreatorTest {
     Body body = mock(Body.class);
     when(bodyCreator.create(request)).thenReturn(body);
 
-    Resource resource = new RequestResourceCreator(headersCreator, insomniaQueryParametersCreator, bodyCreator).create(operation);
+    Resource resource = new RequestResourceCreator(urlCreator, headersCreator, insomniaQueryParametersCreator, bodyCreator).create(operation);
 
     assertNotNull(resource);
     assertIdMatches(REQUEST_ID, resource.getId());
     assertEquals(REQUEST_TYPE, resource.getType());
-    assertName(resource.getName(), baseName);
+    assertNameReadably(resource.getName(), baseName);
     assertEquals(HttpMethod.GET.toString(), resource.getMethod());
-    assertEquals(uri.toString(), resource.getUrl());
+    assertEquals(url, resource.getUrl());
     assertEquals(headers, resource.getHeaders());
     assertEquals(parameterPairs, resource.getParameters());
     assertEquals(body, resource.getBody());
@@ -85,7 +89,7 @@ public class RequestResourceCreatorTest {
 
   @Test
   void createWhenOperationNull() {
-    Resource resource = new RequestResourceCreator(headersCreator, insomniaQueryParametersCreator, bodyCreator).create(null);
+    Resource resource = new RequestResourceCreator(urlCreator, headersCreator, insomniaQueryParametersCreator, bodyCreator).create(null);
 
     assertNull(resource);
   }
@@ -94,7 +98,7 @@ public class RequestResourceCreatorTest {
   void createWhenRequestNull() {
     when(operation.getRequest()).thenReturn(null);
 
-    Resource resource = new RequestResourceCreator(headersCreator, insomniaQueryParametersCreator, bodyCreator).create(operation);
+    Resource resource = new RequestResourceCreator(urlCreator, headersCreator, insomniaQueryParametersCreator, bodyCreator).create(operation);
 
     assertNull(resource);
   }
@@ -103,7 +107,7 @@ public class RequestResourceCreatorTest {
   void createWhenRequestUriNull() {
     when(request.getUri()).thenReturn(null);
 
-    Resource resource = new RequestResourceCreator(headersCreator, insomniaQueryParametersCreator, bodyCreator).create(operation);
+    Resource resource = new RequestResourceCreator(urlCreator, headersCreator, insomniaQueryParametersCreator, bodyCreator).create(operation);
 
     assertNotNull(resource);
     assertNull(resource.getUrl());
@@ -113,7 +117,7 @@ public class RequestResourceCreatorTest {
   void createWhenHttpMethodNull() {
     when(request.getMethod()).thenReturn(null);
 
-    Resource resource = new RequestResourceCreator(headersCreator, insomniaQueryParametersCreator, bodyCreator).create(operation);
+    Resource resource = new RequestResourceCreator(urlCreator, headersCreator, insomniaQueryParametersCreator, bodyCreator).create(operation);
 
     assertNotNull(resource);
     assertNull(resource.getMethod());

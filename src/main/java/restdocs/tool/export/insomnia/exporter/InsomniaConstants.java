@@ -8,11 +8,13 @@ public class InsomniaConstants {
   public static final String EXPORT_TYPE = "export";
   public static final String REQUEST_GROUP_TYPE = "request_group";
   public static final String REQUEST_TYPE = "request";
+  public static final String ENVIRONMENT_TYPE = "environment";
 
   // ID MARKERS
   public static final String REQUEST_ID = "req_";
   public static final String PAIR_ID = "pair_";
   public static final String FOLDER_ID = "fld_";
+  public static final String ENV_ID = "env_";
 
   // EXPORT
   public static final int EXPORT_FORMAT = 4;

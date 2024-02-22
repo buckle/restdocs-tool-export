@@ -7,7 +7,7 @@ plugins {
 }
 
 group = 'com.github.buckle'
-version = '0.0.4-RELEASE'
+version = '0.0.5-RELEASE'
 
 java {
   sourceCompatibility = JavaVersion.VERSION_17
@@ -23,7 +23,7 @@ ext {
 
 dependencies {
   implementation('org.springframework.restdocs:spring-restdocs-core:3.0.0')
-  implementation('org.springframework:spring-web:6.0.12')
+  implementation('org.springframework:spring-web:6.0.17')
   implementation('org.slf4j:slf4j-api:2.0.9')
 
   implementation('org.apache.commons:commons-lang3:3.13.0')
@@ -36,9 +36,12 @@ dependencies {
     because 'version 6.0.0 pulled in by spring-restdocs-mockmvc:3.0.0 affected by vulnerability'
   }
 
-  testImplementation('org.springframework.boot:spring-boot-starter-test:3.1.4')
+  testImplementation('org.springframework.boot:spring-boot-starter-test:3.1.8')
   testImplementation('org.yaml:snakeyaml:2.2') {
     because 'version 1.33 pulled in by spring-boot-starter-test:3.1.4 affected by vulnerability'
+  }
+  testImplementation('com.jayway.jsonpath:json-path:2.9.0') {
+    because 'version 2.8.0 pulled in by spring-boot-starter-test:3.1.8 affected by vulnerability'
   }
 
   testImplementation('org.mockito:mockito-core:5.5.0')
