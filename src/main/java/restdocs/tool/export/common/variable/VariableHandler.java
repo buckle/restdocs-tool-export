@@ -2,7 +2,7 @@ package restdocs.tool.export.common.variable;
 
 public interface VariableHandler {
 
-  String getHostVariable(String applicationName);
+  String createHostVariable(String applicationName);
 
   String replaceVariables(String value);
 

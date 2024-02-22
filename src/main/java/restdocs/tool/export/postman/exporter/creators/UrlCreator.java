@@ -3,7 +3,6 @@ package restdocs.tool.export.postman.exporter.creators;
 import org.springframework.restdocs.operation.Operation;
 import org.springframework.restdocs.operation.OperationRequest;
 import org.springframework.restdocs.operation.QueryParameters;
-import restdocs.tool.export.ToolExportSnippet;
 import restdocs.tool.export.common.ExportConstants;
 import restdocs.tool.export.common.creator.Creator;
 import restdocs.tool.export.postman.exporter.Url;
@@ -38,8 +37,7 @@ public class UrlCreator implements Creator<Url, Operation> {
       URI uri = request.getUri();
 
       if (operation.getAttributes().get(ExportConstants.HOST_VARIABLE_ENABLED) != null && (boolean)operation.getAttributes().get(ExportConstants.HOST_VARIABLE_ENABLED)) {
-        String hostVariable = postmanVariableHandler.getHostVariable((String)operation.getAttributes().get(ExportConstants.APPLICATION_NAME));
-        ToolExportSnippet.addVariable(hostVariable);
+        String hostVariable = postmanVariableHandler.createHostVariable((String)operation.getAttributes().get(ExportConstants.APPLICATION_NAME));
 
         url.setRaw(hostVariable);
         url.setHost(List.of(hostVariable));

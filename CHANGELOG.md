@@ -1,3 +1,7 @@
+0.0.6-RELEASE
+===========================================
+- Fix issue with host variable key being encapsulated in export
+
 0.0.5-RELEASE
 ===========================================
 - Add environment variables for insomnia and postman exports
