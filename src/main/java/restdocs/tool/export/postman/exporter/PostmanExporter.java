@@ -7,6 +7,8 @@ import restdocs.tool.export.postman.exporter.creators.ItemCreator;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class PostmanExporter extends JSONAbstractFileToolExporter {
 
@@ -41,6 +43,12 @@ public class PostmanExporter extends JSONAbstractFileToolExporter {
     if(operation != null) {
       Item item = itemCreator.create(operation);
       this.collection.addItem(item);
+      if (operation.getAttributes() != null) {
+        Set<String> variables = (Set<String>) operation.getAttributes().get("restdocs.tool.export.variables");
+        if (variables != null && !variables.isEmpty()) {
+          this.collection.setVariables(variables.stream().map(s -> new KeyValue(s, "")).collect(Collectors.toSet()));
+        }
+      }
       updateExportData(collection);
     }
   }

@@ -3,6 +3,7 @@ package restdocs.tool.export.insomnia.exporter;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.util.Map;
 import java.util.Set;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -28,6 +29,8 @@ public class Resource {
   private Body body;
   private Set<Pair> headers;
   private Set<Pair> parameters;
+
+  private Map<String, String> data;
 
   public String getType() {
     return type;
@@ -115,5 +118,13 @@ public class Resource {
 
   public void setParameters(Set<Pair> parameters) {
     this.parameters = parameters;
+  }
+
+  public Map<String, String> getData() {
+    return data;
+  }
+
+  public void setData(Map<String, String> data) {
+    this.data = data;
   }
 }

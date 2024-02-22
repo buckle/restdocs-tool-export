@@ -1,3 +1,7 @@
+0.0.5-RELEASE
+===========================================
+- Add environment variables for insomnia and postman exports
+
 0.0.4-RELEASE
 ===========================================
 - Compatible with webflux or webmvc

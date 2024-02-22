@@ -4,23 +4,23 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
-import static restdocs.tool.export.common.assertion.AssertionUtils.assertName;
+import static restdocs.tool.export.common.assertion.AssertionUtils.assertNameReadably;
 
 public class ExportUtilsTest {
 
+  private String TEST_NAME = " blah-blah123*&&^%$#%&*(Hah ";
+
   @Test
-  void formatName() {
-    String name = "blah-blah123*&&^%$#%&*(Hah";
+  void formatNameReadably() {
+    String formattedName = ExportUtils.formatNameReadably(TEST_NAME);
 
-    String formattedName = ExportUtils.formatName(name);
-
-    assertName(formattedName, "blah");
+    assertNameReadably(formattedName, "blah");
     assertEquals("Blah Blah123 Hah", formattedName);
   }
 
   @Test
-  void formatNameWhenNull() {
-    assertNull(ExportUtils.formatName(null));
+  void formatNameReadablyWhenNull() {
+    assertNull(ExportUtils.formatNameReadably(null));
   }
 
 }

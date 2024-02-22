@@ -8,11 +8,14 @@ import org.springframework.http.MediaType;
 import org.springframework.restdocs.operation.OperationRequest;
 import restdocs.tool.export.insomnia.exporter.Body;
 import restdocs.tool.export.insomnia.exporter.Pair;
+import restdocs.tool.export.insomnia.exporter.variable.InsomniaVariableHandler;
 
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 public class BodyCreatorTest {
@@ -28,11 +31,13 @@ public class BodyCreatorTest {
     headers.setContentType(MediaType.APPLICATION_JSON);
     when(operationRequest.getHeaders()).thenReturn(headers);
 
-    Body body = new BodyCreator().create(operationRequest);
+    InsomniaVariableHandler insomniaVariableHandler = spy(new InsomniaVariableHandler());
+    Body body = new BodyCreator(insomniaVariableHandler).create(operationRequest);
 
     assertNotNull(body);
     assertEquals(contentBody, body.getText());
     assertEquals(MediaType.APPLICATION_JSON.toString(), body.getMimeType());
+    verify(insomniaVariableHandler).replaceVariables(contentBody);
   }
 
   @Test
@@ -89,7 +94,8 @@ public class BodyCreatorTest {
     headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
     when(operationRequest.getHeaders()).thenReturn(headers);
 
-    Body body = new BodyCreator().create(operationRequest);
+    InsomniaVariableHandler insomniaVariableHandler = spy(new InsomniaVariableHandler());
+    Body body = new BodyCreator(insomniaVariableHandler).create(operationRequest);
 
     assertNotNull(body);
     assertEquals(1, body.getParams().size());
@@ -97,6 +103,8 @@ public class BodyCreatorTest {
     assertEquals("form1", firstParam.getName());
     assertEquals(formValue, firstParam.getValue());
     assertEquals(MediaType.APPLICATION_FORM_URLENCODED_VALUE, body.getMimeType());
+    verify(insomniaVariableHandler).replaceVariables("form1");
+    verify(insomniaVariableHandler).replaceVariables(formValue);
   }
 
   @Test
@@ -114,6 +122,29 @@ public class BodyCreatorTest {
     assertNotNull(body);
     assertNull(body.getText());
     assertNull(body.getParams());
+    assertEquals(MediaType.APPLICATION_FORM_URLENCODED_VALUE, body.getMimeType());
+  }
+
+  @Test
+  void createWhenWhenContentTypeIsFormUrlEncoded_WithVariables() {
+    String formValue = "testValue";
+    String contentBody = "<<form1>>=<<" + formValue + ">>";
+
+    OperationRequest operationRequest = mock(OperationRequest.class);
+    when(operationRequest.getContentAsString()).thenReturn(contentBody);
+
+    HttpHeaders headers = new HttpHeaders();
+    headers.setAllow(Sets.newSet(HttpMethod.GET));
+    headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+    when(operationRequest.getHeaders()).thenReturn(headers);
+
+    Body body = new BodyCreator().create(operationRequest);
+
+    assertNotNull(body);
+    assertEquals(1, body.getParams().size());
+    Pair firstParam = body.getParams().iterator().next();
+    assertEquals("{{_.form1}}", firstParam.getName());
+    assertEquals("{{_.testvalue}}", firstParam.getValue());
     assertEquals(MediaType.APPLICATION_FORM_URLENCODED_VALUE, body.getMimeType());
   }
 }

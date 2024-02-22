@@ -14,6 +14,9 @@ public class Collection {
   @JsonProperty("item")
   private Set<Item> items = null;
 
+  @JsonProperty("variable")
+  private Set<KeyValue> variables;
+
   public Info getInfo() {
     return info;
   }
@@ -32,5 +35,13 @@ public class Collection {
     }
 
     this.items.add(item);
+  }
+
+  public Set<KeyValue> getVariables() {
+    return variables;
+  }
+
+  public void setVariables(Set<KeyValue> variables) {
+    this.variables = variables;
   }
 }
