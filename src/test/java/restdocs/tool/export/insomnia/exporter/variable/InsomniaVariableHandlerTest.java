@@ -22,13 +22,17 @@ public class InsomniaVariableHandlerTest {
   }
 
   @Test
-  void getHostVariable() {
-    String appName = "some application name";
+  void createHostVariable() {
+    try (MockedStatic<ToolExportSnippet> mockToolExportSnippet = mockStatic(ToolExportSnippet.class)) {
+      String appName = "some application name";
 
-    String hostVariable = insomniaVariableHandler.getHostVariable(appName);
+      String hostVariable = insomniaVariableHandler.createHostVariable(appName);
 
-    assertNotNull(hostVariable);
-    assertEquals("{{_.some_application_name" + VariableKeys.HOST + "}}", hostVariable);
+      assertNotNull(hostVariable);
+      assertEquals("{{_.some_application_name" + VariableKeys.HOST + "}}", hostVariable);
+
+      mockToolExportSnippet.verify(() -> ToolExportSnippet.addVariable("some_application_name" + VariableKeys.HOST ));
+    }
   }
 
   @Test

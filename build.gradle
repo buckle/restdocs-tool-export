@@ -7,7 +7,7 @@ plugins {
 }
 
 group = 'com.github.buckle'
-version = '0.0.5-RELEASE'
+version = '0.0.6-RELEASE'
 
 java {
   sourceCompatibility = JavaVersion.VERSION_17

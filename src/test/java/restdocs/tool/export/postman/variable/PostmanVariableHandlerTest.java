@@ -23,13 +23,17 @@ public class PostmanVariableHandlerTest {
   }
 
   @Test
-  void getHostVariable() {
-    String appName = "some application name";
+  void createHostVariable() {
+    try (MockedStatic<ToolExportSnippet> mockToolExportSnippet = mockStatic(ToolExportSnippet.class)) {
+      String appName = "some application name";
 
-    String hostVariable = postmanVariableHandler.getHostVariable(appName);
+      String hostVariable = postmanVariableHandler.createHostVariable(appName);
 
-    assertNotNull(hostVariable);
-    assertEquals("{{some_application_name" + VariableKeys.HOST + "}}", hostVariable);
+      assertNotNull(hostVariable);
+      assertEquals("{{some_application_name" + VariableKeys.HOST + "}}", hostVariable);
+
+      mockToolExportSnippet.verify(() -> ToolExportSnippet.addVariable("some_application_name" + VariableKeys.HOST));
+    }
   }
 
   @Test

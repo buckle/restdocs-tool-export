@@ -10,10 +10,12 @@ public class BaseVariableHandler implements VariableHandler {
   public final Pattern VARIABLE_PATTERN = Pattern.compile("<<([^>]*)>>");
 
   @Override
-  public String getHostVariable(String applicationName) {
+  public String createHostVariable(String applicationName) {
     String nameVariable = formatNameVariable(applicationName);
     if(nameVariable != null) {
-      return encapsulateVariable(nameVariable + VariableKeys.HOST);
+      String hostVariable = nameVariable + VariableKeys.HOST;
+      ToolExportSnippet.addVariable(hostVariable);
+      return encapsulateVariable(hostVariable);
     }
 
     return null;

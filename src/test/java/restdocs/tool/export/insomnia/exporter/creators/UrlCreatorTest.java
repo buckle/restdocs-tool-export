@@ -18,6 +18,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.mockStatic;
 import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 public class UrlCreatorTest {
@@ -35,28 +36,26 @@ public class UrlCreatorTest {
 
   @Test
   public void create() throws Exception {
-    try (MockedStatic<ToolExportSnippet> mockToolExportSnippet = mockStatic(ToolExportSnippet.class)) {
-      OperationRequest operationRequest = mock(OperationRequest.class);
-      URI uri = new URI("https://localhost/a/url/path");
-      when(operationRequest.getUri()).thenReturn(uri);
+    OperationRequest operationRequest = mock(OperationRequest.class);
+    URI uri = new URI("https://localhost/a/url/path");
+    when(operationRequest.getUri()).thenReturn(uri);
 
-      Map<String, Object> attributes = new HashMap<>();
-      attributes.put(ExportConstants.APPLICATION_NAME, applicationName);
-      attributes.put(ExportConstants.HOST_VARIABLE_ENABLED, true);
+    Map<String, Object> attributes = new HashMap<>();
+    attributes.put(ExportConstants.APPLICATION_NAME, applicationName);
+    attributes.put(ExportConstants.HOST_VARIABLE_ENABLED, true);
 
-      Operation operation = mock(Operation.class);
-      when(operation.getRequest()).thenReturn(operationRequest);
-      when(operation.getAttributes()).thenReturn(attributes);
+    Operation operation = mock(Operation.class);
+    when(operation.getRequest()).thenReturn(operationRequest);
+    when(operation.getAttributes()).thenReturn(attributes);
 
-      String hostVariable = "some_host";
-      when(insomniaVariableHandler.getHostVariable(applicationName)).thenReturn(hostVariable);
-      when(insomniaVariableHandler.replaceVariables(anyString())).thenReturn("/a/url/path");
-      String url = urlCreator.create(operation);
+    String hostVariable = "some_host";
+    when(insomniaVariableHandler.createHostVariable(applicationName)).thenReturn(hostVariable);
+    when(insomniaVariableHandler.replaceVariables(anyString())).thenReturn("/a/url/path");
+    String url = urlCreator.create(operation);
 
-      assertNotNull(url);
-      assertEquals(hostVariable + "/a/url/path", url);
-      mockToolExportSnippet.verify(() -> ToolExportSnippet.addVariable(hostVariable));
-    }
+    assertNotNull(url);
+    assertEquals(hostVariable + "/a/url/path", url);
+    verify(insomniaVariableHandler).createHostVariable(applicationName);
   }
 
   @Test

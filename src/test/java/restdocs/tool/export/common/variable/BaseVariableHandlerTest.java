@@ -2,8 +2,11 @@ package restdocs.tool.export.common.variable;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.MockedStatic;
+import restdocs.tool.export.ToolExportSnippet;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mockStatic;
 import static restdocs.tool.export.common.assertion.AssertionUtils.assertNameVariable;
 
 public class BaseVariableHandlerTest {
@@ -18,16 +21,19 @@ public class BaseVariableHandlerTest {
   }
 
   @Test
-  void getHostVariable() {
-    String hostVariable = variableHandler.getHostVariable(TEST_NAME);
+  void createHostVariable() {
+    try (MockedStatic<ToolExportSnippet> mockToolExportSnippet = mockStatic(ToolExportSnippet.class)) {
+      String hostVariable = variableHandler.createHostVariable(TEST_NAME);
 
-    assertNotNull(hostVariable);
-    assertEquals(BASE_FORMATTED_NAME + VariableKeys.HOST, hostVariable);
+      assertNotNull(hostVariable);
+      assertEquals(BASE_FORMATTED_NAME + VariableKeys.HOST, hostVariable);
+      mockToolExportSnippet.verify(() -> ToolExportSnippet.addVariable(BASE_FORMATTED_NAME + VariableKeys.HOST));
+    }
   }
 
   @Test
-  void getHostVariableWhenNull() {
-    assertNull(variableHandler.getHostVariable(null));
+  void createHostVariableWhenNull() {
+    assertNull(variableHandler.createHostVariable(null));
   }
 
   @Test
